@@ -705,7 +705,7 @@ def find_skelenton(orig_sphere_polydata, orig_surf_polydata, point_patchSize_dic
     draw_3hinge_on_surf(orig_surf_polydata, hinge3_list, output_prefix + '_surf_3hinge_vertex.vtk')
 
 
-def find_skelenton_missing2(orig_sphere_polydata, orig_surf_polydata, skeleton_polydata, curv_data_delete_thicknessZero, original_sulc_data, length_thres_of_long_gyri, neighbor_missing_path_smallest_step, flat_threshold_for_convex_gyri, nearest_skeleton_num, island_gyri_length_thres, output_prefix):
+def find_skelenton_missing(orig_sphere_polydata, orig_surf_polydata, skeleton_polydata, curv_data_delete_thicknessZero, original_sulc_data, length_thres_of_long_gyri, neighbor_missing_path_smallest_step, flat_threshold_for_convex_gyri, nearest_skeleton_num, island_gyri_length_thres, output_prefix):
     print('================= build skeleton:\t' + time.asctime(time.localtime(time.time())) + '=======================')
     final_connection_list = read_connection_of_skelenton_file(skeleton_polydata)
     final_point_lines_dict = create_tree_connection_dict(final_connection_list)
@@ -732,6 +732,32 @@ def find_skelenton_missing2(orig_sphere_polydata, orig_surf_polydata, skeleton_p
     draw_3hinge_on_surf(orig_sphere_polydata, hinge3_list, output_prefix + '_sphere_3hinge_vertex.vtk')
     draw_3hinge_on_surf(orig_surf_polydata, hinge3_list, output_prefix + '_surf_3hinge_vertex.vtk')
 
+def find_skelenton_missing2(orig_sphere_polydata, orig_surf_polydata, skeleton_polydata, curv_data_delete_thicknessZero, original_sulc_data, length_thres_of_long_gyri, neighbor_missing_path_smallest_step, flat_threshold_for_convex_gyri, nearest_skeleton_num, island_gyri_length_thres, output_prefix):
+    print('================= build skeleton:\t' + time.asctime(time.localtime(time.time())) + '=======================')
+    final_connection_list = read_connection_of_skelenton_file(skeleton_polydata)
+    final_point_lines_dict = create_tree_connection_dict(final_connection_list)
+    print('find missing gyri  \t' + time.asctime(time.localtime(time.time())))
+    final_point_lines_dict = create_connection_for_missing_gyri(orig_surf_polydata, orig_sphere_polydata,
+                                                                final_point_lines_dict, original_sulc_data,
+                                                                curv_data_delete_thicknessZero,
+                                                                length_thres_of_long_gyri,
+                                                                neighbor_missing_path_smallest_step,
+                                                                flat_threshold_for_convex_gyri, nearest_skeleton_num,
+                                                                island_gyri_length_thres, output_prefix)
+    all_connection_list = create_connectingPair(final_point_lines_dict)
+    write_allPoints_and_skelenton_by_connectionPair(orig_sphere_polydata, all_connection_list, output_prefix + '_sphere_skelenton_allpoints_final_GDM.vtk')
+    write_allPoints_and_skelenton_by_connectionPair(orig_surf_polydata, all_connection_list, output_prefix + '_surf_skelenton_allpoints_final_GDM.vtk')
+
+    all_point_lines_dict = create_tree_connection_dict(all_connection_list)
+
+    print('find and draw 3hinge' + time.asctime(time.localtime(time.time())))
+    hinge3_list = create_3hinge(all_point_lines_dict)
+    hinge3_txt = open(output_prefix + '_3hinge_ids.txt', "w")
+    for hinge in hinge3_list:
+        hinge3_txt.write(str(hinge) + "\n")
+    hinge3_txt.close()
+    draw_3hinge_on_surf(orig_sphere_polydata, hinge3_list, output_prefix + '_sphere_3hinge_vertex_GDM.vtk')
+    draw_3hinge_on_surf(orig_surf_polydata, hinge3_list, output_prefix + '_surf_3hinge_vertex_GDM.vtk')
 
 
 
@@ -1451,14 +1477,11 @@ def main(args):
     print(current_subject_list)
 
     sphere_list = args.sphere_list
-    # for subject in current_subject_list:
-    #     # print(subject)
-    #     subject = str(subject)
     for subject in current_subject_list:
         if isinstance(subject, int):
             subject = str(subject)
 
-        out_dir = root + '/' + subject + '/' + args.out_dir
+        out_dir = root + '/' + args.out_dir
 
         if not os.path.exists(out_dir):
             # shutil.rmtree(out_dir)
@@ -1471,7 +1494,7 @@ def main(args):
 
             if os.path.exists(result_file_path):
                 continue
-            
+
             subject_folder = str(subject + '_recon')
 
             sphere_file = root + '/' + subject + '/' + subject_folder + '/' + 'surf' + '/' +sphere + args.sphere_file
@@ -1486,6 +1509,7 @@ def main(args):
             print(thickness_file)
 
             output_prefix = out_dir + '/' + sphere
+            # feature_file_dict = {'sulc': sulc_file, 'curv': curv_file, 'thickness': thickness_file}
             feature_file_dict = {'gradient_density': sulc_file, 'curv': curv_file, 'thickness': thickness_file}
 
             sphere_polydata = read_vtk_file(sphere_file)
@@ -1507,7 +1531,7 @@ def main(args):
                                                                                                          args.outer_gyri_curv_thres,
                                                                                                          args.inner_sulci_neighbor_curv_thres,
                                                                                                          output_prefix,
-                                                                                                         sulc_threshold=0.3)
+                                                                                                         sulc_threshold=0.2)
 
             print('calculate patchsize of gyri part:\t' + time.asctime(time.localtime(time.time())))
             point_patchSize_dict_updated = find_the_patchSize_of_gyri_point(updated_sulc_data, point_neighbor_points_dict)
@@ -1539,13 +1563,13 @@ def main(args):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="GyralNet creation by expending algorithm")
-    parser.add_argument('-root_dir', '--root_dir', type=str, default='.', help='root for input data')
+    parser.add_argument('-root_dir', '--root_dir', type=str, default='./', help='root for input data')
 
-    parser.add_argument('-subject_list_start_id', '--subject_list_start_id', type=int, default=100206, help='subjects list start and end ids')
+    parser.add_argument('-subject_list_start_id', '--subject_list_start_id', type=int, default=0, help='subjects list start and end ids')
     parser.add_argument('-subject_list_end_id', '--subject_list_end_id', type=int, default=-1, help='subjects list start and end ids')
 
     parser.add_argument('-input_dir', '--input_dir', type=str, default='_recon', help='input dir within each subject')
-    parser.add_argument('-out_dir', '--out_dir', type=str, default='gyralnet_island_GDM0.3', help='out dir within each subject')
+    parser.add_argument('-out_dir', '--out_dir', type=str, default='gyralnet_island_GDM0.2', help='out dir within each subject')
     parser.add_argument('-sphere_list', '--sphere_list', type=list, default=['lh', 'rh'], help='spheres')
     parser.add_argument('-sphere_file', '--sphere_file', type=str, default='.withGrad.32k_fs_LR.Sphere.vtk', help='sphere_file name')
 
@@ -1553,7 +1577,7 @@ if __name__ == '__main__':
     parser.add_argument('-curv_file', '--curv_file', type=str, default='.fs_LR_32k.flip.curv', help='curv_file name')
     parser.add_argument('-sulc_file', '--sulc_file', type=str, default='.grad.sulc', help='sulc_file name')
     parser.add_argument('-thickness_file', '--thickness_file', type=str, default='.fs_LR_32k.thickness', help='thickness_file name')
-
+    
     parser.add_argument('-inner_sulci_curv_thres', '--inner_sulci_curv_thres', type=float, default=0.06, help='the curv threshold to identify sulci in the gyri part')
     parser.add_argument('-inner_sulci_neighbor_curv_thres', '--inner_sulci_neighbor_curv_thres', type=float, default=0.006, help='the curv threshold to change the neighbor to sulci')
     parser.add_argument('-inner_sulci_round_thres', '--inner_sulci_round_thres', type=int, default=6, help='the patch size threshold to identify sulci in the gyri part')
