@@ -1495,11 +1495,18 @@ def main(args):
             if os.path.exists(result_file_path):
                 continue
 
-            sphere_file = root + '/' + args.input_dir + '/' + 'surf' + '/' +sphere + args.sphere_file
-            surf_file = root + '/' + sphere + args.surf_file
-            curv_file = root + '/' + args.input_dir + '/' + 'surf' + '/' +sphere + args.curv_file
-            sulc_file = root + '/' + args.input_dir + '/' + 'surf' + '/' +sphere + args.sulc_file
-            thickness_file = root +'/' + args.input_dir + '/' + 'surf' + '/' + sphere + args.thickness_file
+            subject_folder = str(subject + '_recon')
+
+            sphere_file = root + '/' + subject + '/' + subject_folder + '/' + 'surf' + '/' +sphere + args.sphere_file
+            print(sphere_file)
+            surf_file = root + '/' + subject +  '/' + subject_folder + '/' + 'surf' + '/' +sphere + args.surf_file
+            print(surf_file)
+            curv_file = root + '/' + subject + '/' + subject_folder + '/' + 'surf' + '/' +sphere + args.curv_file
+            print(curv_file)
+            sulc_file = root + '/' + subject + '/' + subject_folder + '/' + 'surf' + '/' +sphere + args.sulc_file
+            print(sulc_file)
+            thickness_file = root +'/' + subject + '/' + subject_folder + '/' + 'surf' + '/' + sphere + args.thickness_file
+            print(thickness_file)
 
             output_prefix = out_dir + '/' + sphere
             # feature_file_dict = {'sulc': sulc_file, 'curv': curv_file, 'thickness': thickness_file}
