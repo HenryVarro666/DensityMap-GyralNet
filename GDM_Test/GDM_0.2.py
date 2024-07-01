@@ -1567,10 +1567,10 @@ if __name__ == '__main__':
     parser.add_argument('-sphere_file', '--sphere_file', type=str, default='.withGrad.32k_fs_LR.Sphere.vtk', help='sphere_file name')
 
     parser.add_argument('-surf_file', '--surf_file', type=str, default='.withGrad.32k_fs_LR.Inner.vtk', help='surf_file name')
-    parser.add_argument('-curv_file', '--curv_file', type=str, default='.flip.curv', help='curv_file name')
+    parser.add_argument('-curv_file', '--curv_file', type=str, default='.fs_LR_32k.flip.curv', help='curv_file name')
     parser.add_argument('-sulc_file', '--sulc_file', type=str, default='.grad.sulc', help='sulc_file name')
-    parser.add_argument('-thickness_file', '--thickness_file', type=str, default='.thickness', help='thickness_file name')
-
+    parser.add_argument('-thickness_file', '--thickness_file', type=str, default='.fs_LR_32k.flip.thickness', help='thickness_file name')
+    
     parser.add_argument('-inner_sulci_curv_thres', '--inner_sulci_curv_thres', type=float, default=0.06, help='the curv threshold to identify sulci in the gyri part')
     parser.add_argument('-inner_sulci_neighbor_curv_thres', '--inner_sulci_neighbor_curv_thres', type=float, default=0.006, help='the curv threshold to change the neighbor to sulci')
     parser.add_argument('-inner_sulci_round_thres', '--inner_sulci_round_thres', type=int, default=6, help='the patch size threshold to identify sulci in the gyri part')
