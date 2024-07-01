@@ -2,7 +2,7 @@
 Author: HenryVarro666 1504517223@qq.com
 Date: 1969-12-31 19:00:00
 LastEditors: HenryVarro666 1504517223@qq.com
-LastEditTime: 2024-07-01 07:50:44
+LastEditTime: 2024-07-01 08:43:08
 FilePath: /DensityMap+GNN/gradient_generate.py
 '''
 import os
@@ -124,6 +124,8 @@ def rescale_feature():
         sphere = pyvista.read(file_path)
         sulc = sphere['gradient_density']
         
+        # rescale sulc
+        # max-min normalization
         sulc = (sulc - np.min(sulc)) / (np.max(sulc) - np.min(sulc)) * (0.989 - (-0.4)) + (-0.4)
 
         sphere['gradient_density'] = sulc
