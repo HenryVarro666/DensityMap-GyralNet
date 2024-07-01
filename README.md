@@ -49,3 +49,9 @@
 ```python
 python3 ./gyralnet_test2.py
 ```
+
+
+### RAW
+```python
+python3 /home/lab/Documents/HCP_data_32k_flip/gyralnet.py --root_dir="$PWD" --subject_list_start_id="$subject_id" --subject_list_end_id="$((subject_id + 1))" --input_dir="${subject_id}_recon" --out_dir='gyralnet_island_32k_flip'
+```
