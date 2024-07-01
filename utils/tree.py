@@ -38,6 +38,14 @@ class Tree:
         return max_patchSize_point
 
     @classmethod
+    def create_gyri_connection_count(point_connect_points_dict_thin_gyri_parts):
+        gyri_connection_count = dict()
+        for point in point_connect_points_dict_thin_gyri_parts.keys():
+            count = len(point_connect_points_dict_thin_gyri_parts[point])
+            gyri_connection_count[point] = count
+        return gyri_connection_count
+
+    @classmethod
     def create_tree(cls, orig_sphere_polydata, orig_surf_polydata, point_patchSize_dict_updated, point_connect_points_dict_thin_gyri_parts, thin_sulc_data, output_prefix):
         """
         Creates a tree structure based on the given inputs.
