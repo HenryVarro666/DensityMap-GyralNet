@@ -65,6 +65,73 @@ def create_morph_data():
 
     return
 
+
+def create_morph_data_zero():
+    """
+    Creates morphological data for each subject in the given data directory.
+
+    Returns:
+        None
+    """
+    data_dir = "./100206/100206_recon/surf"
+    file_list = os.listdir(data_dir)
+    threshold = 0.7
+
+    for file in file_list:
+        # if '.withGrad.32k_fs_LR.Inner.vtk' not in file:
+        if '.withGrad.32k_fs_LR.Inner.vtk' not in file:
+            continue
+        if 'lh' in file:
+            hemi = 'lh'
+        elif 'rh' in file:
+            hemi = 'rh'
+        file_path = os.path.join(data_dir, file)
+        surf = pyvista.read(file_path)
+        Gradient_Density = surf['gradient_density']
+        Gradient_Density = Gradient_Density - threshold
+        fio.write_morph_data(os.path.join(data_dir, "%s.%s.grad.sulc"%(hemi, threshold)), Gradient_Density, fnum=327680)
+
+    return
+
+def rescale_feature():
+    """
+    Rescales the 'sulc' and 'curv' features of each file in the specified data directory.
+
+    Returns:
+        None
+    """
+    data_dir = "/home/lab/Documents/DensityMap-GyralNet/32k_3subjects"
+    file_list = os.listdir(data_dir)
+    pbar = tqdm(file_list)
+    for file in pbar:
+        if '.withGrad.32k_fsaverage.flip.Sphere.vtk' not in file:
+            continue
+        subject_id = file.split('.')[0]
+        if 'lh' in file:
+            hemi = 'lh'
+        elif 'lh' in file:
+            hemi = 'rh'
+
+        file_path = os.path.join(data_dir, file)
+
+        sphere = pyvista.read(file_path)
+        sulc = sphere['sulc']
+        curv = sphere['curv']
+        
+        sulc *= (1.78 + 1.88) / (np.max(sulc) - np.min(sulc))
+        sulc -= np.max(sulc) - 1.78
+
+        curv *= (0.54 + 0.67) / (np.max(curv) - np.min(curv))
+        curv -= np.max(curv) - 0.54
+
+        sphere['sulc'] = sulc
+        sphere['curv'] = curv
+
+        fio.write_morph_data(os.path.join(data_dir, "%s.%s.flip.rescale.sulc"%(subject_id, hemi)), sulc, fnum=327680)
+        fio.write_morph_data(os.path.join(data_dir, "%s.%s.flip.rescale.curv"%(subject_id, hemi)), curv, fnum=327680)
+        sphere.save(file_path.replace('.withGrad.164k_fsaverage.flip.Sphere.vtk', '.withGrad.164k_fsaverage.flip.rescale.Sphere.vtk'), binary=False)
+    return
+
 if __name__ == "__main__":
-    create_morph_data()
+    create_morph_data_zero()
     # print("True")
