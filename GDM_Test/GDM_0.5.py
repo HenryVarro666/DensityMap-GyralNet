@@ -8,7 +8,7 @@ import shutil
 import time
 import networkx as nx
 import argparse
-from utils import featured_sphere
+# from utils import featured_sphere
 
 
 def read_vtk_file(vtk_file):
