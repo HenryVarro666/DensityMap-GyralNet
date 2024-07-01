@@ -1404,40 +1404,59 @@ def draw_patchSize_colorful_file(sphere_polydata, surf_polydata, point_patchSize
 
 
 def main(args):
-    root = args.root_dir
+    # root = args.root_dir
     # subject_index_start = args.subject_list_start_id
-    # print(subject_index_start)
+    # # print(subject_index_start)
     # subject_index_end = args.subject_list_end_id
-    # subjects_list = [str(subject) for subject in os.listdir(root) if not subject.startswith('.')]
-    # subjects_list.sort()
-    # current_subject_list = subjects_list[subject_index_start:subject_index_end]
-    current_subject_list = [100206]
-    print(current_subject_list)
+    # # subjects_list = [str(subject) for subject in os.listdir(root) if not subject.startswith('.')]
+    # # subjects_list.sort()
+    # # current_subject_list = subjects_list[subject_index_start:subject_index_end]
+    # current_subject_list = [subject_index_start]
+    # print(current_subject_list)
+    # sphere_list = args.sphere_list
 
+
+    root = "."
     sphere_list = args.sphere_list
+    current_subject_list = [100206]
     for subject in current_subject_list:
-        # print(subject)
         subject = str(subject)
+        print(subject)
 
-        out_dir = root + '/' + subject + '/' + [args.out_dir]
+        out_dir = root + '/' + subject + '/' + 'gyralnet_island_tmp'
 
         if not os.path.exists(out_dir):
             # shutil.rmtree(out_dir)
             os.mkdir(out_dir)
+            print("Output_dir is: " + out_dir)
 
+        # sphere_list = ['lh', 'rh']
         for sphere in sphere_list:
             result_file = f'{sphere}_surf_3hinge_vertex.vtk'
             result_file_path = os.path.join(out_dir, result_file)
-            #print(result_file_path)
+            print(result_file_path)
 
             if os.path.exists(result_file_path):
                 continue
 
-            sphere_file = root + '/' + args.input_dir + '/' + 'surf' + '/' +sphere + args.sphere_file
-            surf_file = root + '/' + sphere + args.surf_file
-            curv_file = root + '/' + args.input_dir + '/' + 'surf' + '/' +sphere + args.curv_file
-            sulc_file = root + '/' + args.input_dir + '/' + 'surf' + '/' +sphere + args.sulc_file
-            thickness_file = root +'/' + args.input_dir + '/' + 'surf' + '/' + sphere + args.thickness_file
+            subject_folder = str(subject + '_recon')
+
+            sphere_file = root + '/' + subject + '/' + subject_folder + '/' + 'surf' + '/' +sphere + args.sphere_file
+            print(sphere_file)
+            surf_file = root + '/' + subject +  '/' + subject_folder + '/' + 'surf' + '/' +sphere + args.surf_file
+            print(surf_file)
+            curv_file = root + '/' + subject + '/' + subject_folder + '/' + 'surf' + '/' +sphere + args.curv_file
+            print(curv_file)
+            sulc_file = root + '/' + subject + '/' + subject_folder + '/' + 'surf' + '/' +sphere + args.sulc_file
+            print(sulc_file)
+            thickness_file = root +'/' + subject + '/' + subject_folder + '/' + 'surf' + '/' + sphere + args.thickness_file
+            print(thickness_file)
+
+
+            output_prefix = out_dir + '/' + sphere
+            feature_file_dict = {'sulc': sulc_file, 'curv': curv_file, 'thickness': thickness_file}
+            print(feature_file_dict)
+
 
             output_prefix = out_dir + '/' + sphere
             feature_file_dict = {'sulc': sulc_file, 'curv': curv_file, 'thickness': thickness_file}
@@ -1490,13 +1509,13 @@ def main(args):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="GyralNet creation by expending algorithm")
-    parser.add_argument('-root_dir', '--root_dir', type=str, default='./', help='root for input data')
+    # parser.add_argument('-root_dir', '--root_dir', type=str, default='./', help='root for input data')
 
-    parser.add_argument('-subject_list_start_id', '--subject_list_start_id', type=int, default=0, help='subjects list start and end ids')
-    parser.add_argument('-subject_list_end_id', '--subject_list_end_id', type=int, default=-1, help='subjects list start and end ids')
+    # parser.add_argument('-subject_list_start_id', '--subject_list_start_id', type=int, default=0, help='subjects list start and end ids')
+    # parser.add_argument('-subject_list_end_id', '--subject_list_end_id', type=int, default=-1, help='subjects list start and end ids')
 
-    parser.add_argument('-input_dir', '--input_dir', type=str, default='_recon', help='input dir within each subject')
-    parser.add_argument('-out_dir', '--out_dir', type=str, default='gyralnet_island_tmp', help='out dir within each subject')
+    # parser.add_argument('-input_dir', '--input_dir', type=str, default='_recon', help='input dir within each subject')
+    # parser.add_argument('-out_dir', '--out_dir', type=str, default='gyralnet_island', help='out dir within each subject')
     parser.add_argument('-sphere_list', '--sphere_list', type=list, default=['lh', 'rh'], help='spheres')
     parser.add_argument('-sphere_file', '--sphere_file', type=str, default='.withGrad.164k_fsaverage.flip.Sphere.vtk', help='sphere_file name')
 
@@ -1519,4 +1538,3 @@ if __name__ == '__main__':
     args = parser.parse_args()
     print(args)
     main(args)
-

@@ -39,7 +39,7 @@ def main(args):
     # sphere_list = args.sphere_list
 
 
-    root = "./100206"
+    root = "."
     sphere_list = args.sphere_list
     current_subject_list = [100206]
     for subject in current_subject_list:
@@ -62,15 +62,17 @@ def main(args):
             if os.path.exists(result_file_path):
                 continue
 
-            sphere_file = root + '/' + subject + '/' + 'surf' + '/' +sphere + args.sphere_file
+            subject_folder = str(subject + '_recon')
+
+            sphere_file = root + '/' + subject + '/' + subject_folder + '/' + 'surf' + '/' +sphere + args.sphere_file
             print(sphere_file)
-            surf_file = root + '/' + subject + '/' + 'surf' + '/' +sphere + args.surf_file
+            surf_file = root + '/' + subject +  '/' + subject_folder + '/' + 'surf' + '/' +sphere + args.surf_file
             print(surf_file)
-            curv_file = root + '/' + subject + '/' + 'surf' + '/' +sphere + args.curv_file
+            curv_file = root + '/' + subject + '/' + subject_folder + '/' + 'surf' + '/' +sphere + args.curv_file
             print(curv_file)
-            sulc_file = root + '/' + subject + '/' + 'surf' + '/' +sphere + args.sulc_file
+            sulc_file = root + '/' + subject + '/' + subject_folder + '/' + 'surf' + '/' +sphere + args.sulc_file
             print(sulc_file)
-            thickness_file = root +'/' + subject + '/' + 'surf' + '/' + sphere + args.thickness_file
+            thickness_file = root +'/' + subject + '/' + subject_folder + '/' + 'surf' + '/' + sphere + args.thickness_file
             print(thickness_file)
 
 
