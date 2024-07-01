@@ -2,7 +2,7 @@
 Author: HenryVarro666 1504517223@qq.com
 Date: 1969-12-31 19:00:00
 LastEditors: HenryVarro666 1504517223@qq.com
-LastEditTime: 2024-06-30 23:09:38
+LastEditTime: 2024-06-30 23:16:01
 FilePath: /DensityMap-GyralNet/GDM.py
 '''
 import vtk
@@ -60,17 +60,17 @@ def main(args):
             if os.path.exists(result_file_path):
                 continue
 
-            subject_folder = str(subject + '_recon')
+            recon_folder = str(subject + '_recon')
 
-            sphere_file = root + '/' + subject + '/' + subject_folder + '/' + 'surf' + '/' +sphere + args.sphere_file
+            sphere_file = root + '/' + subject + '/' + recon_folder + '/' + 'surf' + '/' +sphere + args.sphere_file
             print(sphere_file)
-            surf_file = root + '/' + subject +  '/' + subject_folder + '/' + 'surf' + '/' +sphere + args.surf_file
+            surf_file = root + '/' + subject +  '/' + recon_folder + '/' + 'surf' + '/' +sphere + args.surf_file
             print(surf_file)
-            curv_file = root + '/' + subject + '/' + subject_folder + '/' + 'surf' + '/' +sphere + args.curv_file
+            curv_file = root + '/' + subject + '/' + recon_folder + '/' + 'surf' + '/' +sphere + args.curv_file
             print(curv_file)
-            sulc_file = root + '/' + subject + '/' + subject_folder + '/' + 'surf' + '/' +sphere + args.sulc_file
+            sulc_file = root + '/' + subject + '/' + recon_folder + '/' + 'surf' + '/' +sphere + args.sulc_file
             print(sulc_file)
-            thickness_file = root +'/' + subject + '/' + subject_folder + '/' + 'surf' + '/' + sphere + args.thickness_file
+            thickness_file = root +'/' + subject + '/' + recon_folder + '/' + 'surf' + '/' + sphere + args.thickness_file
             print(thickness_file)
 
 
