@@ -2,7 +2,7 @@
 Author: HenryVarro666 1504517223@qq.com
 Date: 1969-12-31 19:00:00
 LastEditors: HenryVarro666 1504517223@qq.com
-LastEditTime: 2024-06-25 20:07:39
+LastEditTime: 2024-07-01 01:15:38
 FilePath: /DensityMap+GNN/utils/gyral_data.py
 '''
 
@@ -35,8 +35,10 @@ class GyralData:
         """
         point_patchSize_dict = dict()
         for point in point_neighbor_points_dict.keys():
+            # if the point is a gyri point
             if sulc_data[point] > 0:
                 point_patchSize_dict[point] = -1
+            # if the point is a sulc point
             else:
                 inner_points_list = list()
                 outer_points_list = list()
