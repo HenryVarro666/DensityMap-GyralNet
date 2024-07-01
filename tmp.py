@@ -2,7 +2,7 @@
 Author: HenryVarro666 1504517223@qq.com
 Date: 1969-12-31 19:00:00
 LastEditors: HenryVarro666 1504517223@qq.com
-LastEditTime: 2024-06-28 14:36:25
+LastEditTime: 2024-06-30 22:38:56
 FilePath: /DensityMap+GNN/tmp.py
 '''
 import vtk
@@ -46,7 +46,7 @@ def main(args):
         subject = str(subject)
         print(subject)
 
-        out_dir = root + '/' + args.out_dir
+        out_dir = root + '/' + subject + '/' + 'gyralnet_island_tmp'
 
         if not os.path.exists(out_dir):
             # shutil.rmtree(out_dir)
@@ -62,15 +62,15 @@ def main(args):
             if os.path.exists(result_file_path):
                 continue
 
-            sphere_file = root + '/' + args.input_dir + '/' + 'surf' + '/' +sphere + args.sphere_file
+            sphere_file = root + '/' + subject + '/' + 'surf' + '/' +sphere + args.sphere_file
             print(sphere_file)
-            surf_file = root + '/' + args.input_dir + '/' + 'surf' + '/' +sphere + args.surf_file
+            surf_file = root + '/' + subject + '/' + 'surf' + '/' +sphere + args.surf_file
             print(surf_file)
-            curv_file = root + '/' + args.input_dir + '/' + 'surf' + '/' +sphere + args.curv_file
+            curv_file = root + '/' + subject + '/' + 'surf' + '/' +sphere + args.curv_file
             print(curv_file)
-            sulc_file = root + '/' + args.input_dir + '/' + 'surf' + '/' +sphere + args.sulc_file
+            sulc_file = root + '/' + subject + '/' + 'surf' + '/' +sphere + args.sulc_file
             print(sulc_file)
-            thickness_file = root +'/' + args.input_dir + '/' + 'surf' + '/' + sphere + args.thickness_file
+            thickness_file = root +'/' + subject + '/' + 'surf' + '/' + sphere + args.thickness_file
             print(thickness_file)
 
 
@@ -145,8 +145,8 @@ if __name__ == '__main__':
     # parser.add_argument('-subject_list_start_id', '--subject_list_start_id', type=int, default=0, help='subjects list start and end ids')
     # parser.add_argument('-subject_list_end_id', '--subject_list_end_id', type=int, default=-1, help='subjects list start and end ids')
 
-    parser.add_argument('-input_dir', '--input_dir', type=str, default='100206_recon', help='input dir within each subject')
-    parser.add_argument('-out_dir', '--out_dir', type=str, default='gyralnet_island_tmp', help='out dir within each subject')
+    # parser.add_argument('-input_dir', '--input_dir', type=str, default='100206_recon', help='input dir within each subject')
+    # parser.add_argument('-out_dir', '--out_dir', type=str, default='gyralnet_island_tmp', help='out dir within each subject')
     parser.add_argument('-sphere_list', '--sphere_list', type=list, default=['lh', 'rh'], help='spheres')
     parser.add_argument('-sphere_file', '--sphere_file', type=str, default='.withGrad.32k_fs_LR.Sphere.vtk', help='sphere_file name')
 
