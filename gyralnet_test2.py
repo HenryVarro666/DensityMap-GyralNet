@@ -1423,7 +1423,7 @@ def main(args):
         subject = str(subject)
         print(subject)
 
-        out_dir = root + '/' + subject + '/' + 'gyralnet_island_tmp'
+        out_dir = root + '/' + subject + '/' + 'gyralnet_island_test2'
 
         if not os.path.exists(out_dir):
             # shutil.rmtree(out_dir)
