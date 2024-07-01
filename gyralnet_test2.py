@@ -1517,9 +1517,9 @@ if __name__ == '__main__':
     # parser.add_argument('-input_dir', '--input_dir', type=str, default='_recon', help='input dir within each subject')
     # parser.add_argument('-out_dir', '--out_dir', type=str, default='gyralnet_island', help='out dir within each subject')
     parser.add_argument('-sphere_list', '--sphere_list', type=list, default=['lh', 'rh'], help='spheres')
-    parser.add_argument('-sphere_file', '--sphere_file', type=str, default='.withGrad.164k_fsaverage.flip.Sphere.vtk', help='sphere_file name')
+    parser.add_argument('-sphere_file', '--sphere_file', type=str, default='.withGrad.32k_fs_LR.Sphere.vtk', help='sphere_file name')
 
-    parser.add_argument('-surf_file', '--surf_file', type=str, default='.withGrad.164k_fsaverage.flip.Inner.vtk', help='surf_file name')
+    parser.add_argument('-surf_file', '--surf_file', type=str, default='.withGrad.32k_fs_LR.Inner.vtk', help='surf_file name')
     parser.add_argument('-curv_file', '--curv_file', type=str, default='.flip.curv', help='curv_file name')
     parser.add_argument('-sulc_file', '--sulc_file', type=str, default='.flip.sulc', help='sulc_file name')
     parser.add_argument('-thickness_file', '--thickness_file', type=str, default='.thickness', help='thickness_file name')
