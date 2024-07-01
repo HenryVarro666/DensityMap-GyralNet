@@ -181,7 +181,7 @@ def featured_sphere(orig_sphere_polydata, feature_file_dict, output):
         f.write(str(3) + " " + str(triangle[0]) + " " + str(triangle[1]) + " " + str(triangle[2]) + '\n')
 
     f.write("POINT_DATA " + str(point_num) + '\n')
-    scale_dict = {'sulc': 0.0, 'curv': 0.0, 'thickness': 0.00000000001}
+    scale_dict = {'gradient_density': 0.0, 'curv': 0.0, 'thickness': 0.00000000001}
     for feature_name in scale_dict.keys():
         feature_file = feature_file_dict[feature_name]
         features = io.read_morph_data(feature_file)
@@ -380,7 +380,7 @@ def initialize_sulc_data2(orig_sphere_polydata, orig_surf_polydata, feature_file
 
     thickness_data_raw = io.read_morph_data(feature_file_dict['thickness'])
     thickness_data = thickness_denoise(point_num, point_neighbor_points_dict, thickness_data_raw)
-    sulc_data_raw = io.read_morph_data(feature_file_dict['sulc'])
+    sulc_data_raw = io.read_morph_data(feature_file_dict['gradient_density'])
     sulc_data_delete_thicknessZero = np.where(thickness_data > 0, sulc_data_raw, 0)
     # sulc_data_binary = np.where(sulc_data_delete_thicknessZero >= 0, 1, -1)
     sulc_data_binary = np.where(sulc_data_delete_thicknessZero >= sulc_threshold, 1, -1)
@@ -1502,7 +1502,8 @@ def main(args):
             thickness_file = root +'/' + args.input_dir + '/' + 'surf' + '/' + sphere + args.thickness_file
 
             output_prefix = out_dir + '/' + sphere
-            feature_file_dict = {'sulc': sulc_file, 'curv': curv_file, 'thickness': thickness_file}
+            # feature_file_dict = {'sulc': sulc_file, 'curv': curv_file, 'thickness': thickness_file}
+            feature_file_dict = {'gradient_density': sulc_file, 'curv': curv_file, 'thickness': thickness_file}
 
             sphere_polydata = read_vtk_file(sphere_file)
             surf_polydata = read_vtk_file(surf_file)
