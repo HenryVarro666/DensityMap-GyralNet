@@ -1507,7 +1507,7 @@ def main(args):
                                                                                                          args.outer_gyri_curv_thres,
                                                                                                          args.inner_sulci_neighbor_curv_thres,
                                                                                                          output_prefix,
-                                                                                                         sulc_threshold=0.7)
+                                                                                                         sulc_threshold=0.6)
 
             print('calculate patchsize of gyri part:\t' + time.asctime(time.localtime(time.time())))
             point_patchSize_dict_updated = find_the_patchSize_of_gyri_point(updated_sulc_data, point_neighbor_points_dict)
