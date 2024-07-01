@@ -1507,7 +1507,7 @@ def main(args):
                                                                                                          args.outer_gyri_curv_thres,
                                                                                                          args.inner_sulci_neighbor_curv_thres,
                                                                                                          output_prefix,
-                                                                                                         sulc_threshold=0.6)
+                                                                                                         sulc_threshold=0.4)
 
             print('calculate patchsize of gyri part:\t' + time.asctime(time.localtime(time.time())))
             point_patchSize_dict_updated = find_the_patchSize_of_gyri_point(updated_sulc_data, point_neighbor_points_dict)
@@ -1545,7 +1545,7 @@ if __name__ == '__main__':
     parser.add_argument('-subject_list_end_id', '--subject_list_end_id', type=int, default=-1, help='subjects list start and end ids')
 
     parser.add_argument('-input_dir', '--input_dir', type=str, default='_recon', help='input dir within each subject')
-    parser.add_argument('-out_dir', '--out_dir', type=str, default='gyralnet_island_GDM0.6', help='out dir within each subject')
+    parser.add_argument('-out_dir', '--out_dir', type=str, default='gyralnet_island_GDM0.4', help='out dir within each subject')
     parser.add_argument('-sphere_list', '--sphere_list', type=list, default=['lh', 'rh'], help='spheres')
     parser.add_argument('-sphere_file', '--sphere_file', type=str, default='.withGrad.32k_fs_LR.Sphere.vtk', help='sphere_file name')
 
