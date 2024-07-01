@@ -2,11 +2,11 @@
  * @Author: HenryVarro666 1504517223@qq.com
  * @Date: 1969-12-31 19:00:00
  * @LastEditors: HenryVarro666 1504517223@qq.com
- * @LastEditTime: 2024-06-26 16:19:59
+ * @LastEditTime: 2024-06-30 22:01:09
  * @FilePath: /DensityMap+GNN/README.md
 -->
 
-`gyralnet_rewrite.py` 是一个处理大脑皮层表面数据的脚本，包含了多个功能模块。下面是对其主要功能和结构的概述：
+`tmp.py` 是一个处理大脑皮层表面数据的脚本，包含了多个功能模块。下面是对其主要功能和结构的概述：
 
 ### 主要功能
 
