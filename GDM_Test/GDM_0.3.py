@@ -1477,8 +1477,8 @@ def main(args):
 
     sphere_list = args.sphere_list
     for subject in current_subject_list:
-        # print(subject)
-        subject = str(subject)
+        if isinstance(subject, int):
+            subject = str(subject)
 
         out_dir = root + '/' + args.out_dir
 
