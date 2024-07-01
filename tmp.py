@@ -2,7 +2,7 @@
 Author: HenryVarro666 1504517223@qq.com
 Date: 1969-12-31 19:00:00
 LastEditors: HenryVarro666 1504517223@qq.com
-LastEditTime: 2024-07-01 04:25:22
+LastEditTime: 2024-07-01 04:29:02
 FilePath: /DensityMap+GNN/tmp.py
 '''
 import vtk
@@ -155,7 +155,7 @@ if __name__ == '__main__':
     parser.add_argument('-surf_file', '--surf_file', type=str, default='.withGrad.32k_fs_LR.Inner.vtk', help='surf_file name')
     parser.add_argument('-curv_file', '--curv_file', type=str, default='.fs_LR_32k.flip.curv', help='curv_file name')
     parser.add_argument('-sulc_file', '--sulc_file', type=str, default='.fs_LR_32k.flip.sulc', help='sulc_file name')
-    parser.add_argument('-thickness_file', '--thickness_file', type=str, default='.fs_LR_32k.flip.thickness', help='thickness_file name')
+    parser.add_argument('-thickness_file', '--thickness_file', type=str, default='.fs_LR_32k.thickness', help='thickness_file name')
 
     # inner_sulci_curv_thres (float): the curv threshold to identify sulci in the gyri part
     parser.add_argument('-inner_sulci_curv_thres', '--inner_sulci_curv_thres', type=float, default=0.06, help='the curv threshold to identify sulci in the gyri part')

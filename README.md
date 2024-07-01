@@ -2,7 +2,7 @@
  * @Author: HenryVarro666 1504517223@qq.com
  * @Date: 1969-12-31 19:00:00
  * @LastEditors: HenryVarro666 1504517223@qq.com
- * @LastEditTime: 2024-07-01 00:30:26
+ * @LastEditTime: 2024-07-01 04:33:48
  * @FilePath: /DensityMap+GNN/README.md
 -->
 
@@ -61,3 +61,11 @@ python3 /home/lab/Documents/HCP_data_32k_flip/gyralnet.py --root_dir="$PWD" --su
 ### 20240608_prepare_hcp_fmri.py
 
 vtk + fmri utils
+
+
+---
+DGM_0.7
+
+```python
+python3 GDM_0.7.py --root_dir=. --subject_list_start_id=100206 
+```

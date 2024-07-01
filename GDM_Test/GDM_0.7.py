@@ -1458,7 +1458,7 @@ def main(args):
         if isinstance(subject, int):
             subject = str(subject)
 
-        out_dir = root + '/' + args.out_dir
+        out_dir = root + '/' + subject + '/' + args.out_dir
 
         if not os.path.exists(out_dir):
             # shutil.rmtree(out_dir)
