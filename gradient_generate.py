@@ -113,6 +113,7 @@ def rescale_feature():
         if '.withGrad.32k_fs_LR.Inner.vtk' not in file:
             continue
         subject_id = file.split('.')[0]
+        hemi = None 
         if 'lh' in file:
             hemi = 'lh'
         elif 'lh' in file:
@@ -127,7 +128,8 @@ def rescale_feature():
 
         sphere['gradient_density'] = sulc
 
-        fio.write_morph_data(os.path.join(data_dir, "%s.grad.rescale.sulc"%(hemi)), sulc, fnum=327680)
+        output_path = os.path.join(data_dir, f"{hemi}.grad.rescale.sulc")
+        fio.write_morph_data(output_path, sulc, fnum=327680)    
         # sphere.save(file_path.replace('.withGrad.164k_fsaverage.flip.Sphere.vtk', '.withGrad.164k_fsaverage.flip.rescale.Sphere.vtk'), binary=False)
     return
 
