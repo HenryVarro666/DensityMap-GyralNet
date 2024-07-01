@@ -2,7 +2,7 @@
 Author: HenryVarro666 1504517223@qq.com
 Date: 1969-12-31 19:00:00
 LastEditors: HenryVarro666 1504517223@qq.com
-LastEditTime: 2024-07-01 04:33:48
+LastEditTime: 2024-07-01 07:50:44
 FilePath: /DensityMap+GNN/gradient_generate.py
 '''
 import os
@@ -100,11 +100,17 @@ def rescale_feature():
     Returns:
         None
     """
-    data_dir = "/home/lab/Documents/DensityMap-GyralNet/32k_3subjects"
+    # data_dir = "/home/lab/Documents/DensityMap-GyralNet/32k_3subjects"
+    # file_list = os.listdir(data_dir)
+    # pbar = tqdm(file_list)
+    # for file in pbar:
+    #     if '.withGrad.32k_fsaverage.flip.Sphere.vtk' not in file:
+
+    data_dir = "./100206/100206_recon/surf"
     file_list = os.listdir(data_dir)
-    pbar = tqdm(file_list)
-    for file in pbar:
-        if '.withGrad.32k_fsaverage.flip.Sphere.vtk' not in file:
+
+    for file in file_list:
+        if '.withGrad.32k_fs_LR.Inner.vtk' not in file:
             continue
         subject_id = file.split('.')[0]
         if 'lh' in file:
@@ -115,23 +121,16 @@ def rescale_feature():
         file_path = os.path.join(data_dir, file)
 
         sphere = pyvista.read(file_path)
-        sulc = sphere['sulc']
-        curv = sphere['curv']
+        sulc = sphere['gradient_density']
         
-        sulc *= (1.78 + 1.88) / (np.max(sulc) - np.min(sulc))
-        sulc -= np.max(sulc) - 1.78
+        sulc = (sulc - np.min(sulc)) / (np.max(sulc) - np.min(sulc)) * (0.989 - (-0.4)) + (-0.4)
 
-        curv *= (0.54 + 0.67) / (np.max(curv) - np.min(curv))
-        curv -= np.max(curv) - 0.54
+        sphere['gradient_density'] = sulc
 
-        sphere['sulc'] = sulc
-        sphere['curv'] = curv
-
-        fio.write_morph_data(os.path.join(data_dir, "%s.%s.flip.rescale.sulc"%(subject_id, hemi)), sulc, fnum=327680)
-        fio.write_morph_data(os.path.join(data_dir, "%s.%s.flip.rescale.curv"%(subject_id, hemi)), curv, fnum=327680)
-        sphere.save(file_path.replace('.withGrad.164k_fsaverage.flip.Sphere.vtk', '.withGrad.164k_fsaverage.flip.rescale.Sphere.vtk'), binary=False)
+        fio.write_morph_data(os.path.join(data_dir, "%s.grad.rescale.sulc"%(hemi)), sulc, fnum=327680)
+        # sphere.save(file_path.replace('.withGrad.164k_fsaverage.flip.Sphere.vtk', '.withGrad.164k_fsaverage.flip.rescale.Sphere.vtk'), binary=False)
     return
 
 if __name__ == "__main__":
-    create_morph_data_zero()
+    rescale_feature()
     # print("True")
