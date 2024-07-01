@@ -2,7 +2,7 @@
 Author: HenryVarro666 1504517223@qq.com
 Date: 1969-12-31 19:00:00
 LastEditors: HenryVarro666 1504517223@qq.com
-LastEditTime: 2024-07-01 03:24:47
+LastEditTime: 2024-07-01 04:26:30
 FilePath: /DensityMap+GNN/gradient_generate.py
 '''
 import os
@@ -51,7 +51,8 @@ def create_morph_data():
     file_list = os.listdir(data_dir)
 
     for file in file_list:
-        if '.withGrad.32k_fs_LR.Inner.vtk' not in file:
+        # if '.withGrad.32k_fs_LR.Inner.vtk' not in file:
+        if 'withGrad.164k_fs_LR.Inner.vtk' not in file:
             continue
         if 'lh' in file:
             hemi = 'lh'
