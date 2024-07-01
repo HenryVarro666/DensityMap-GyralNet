@@ -75,7 +75,7 @@ def create_morph_data_zero():
     """
     data_dir = "./100206/100206_recon/surf"
     file_list = os.listdir(data_dir)
-    threshold = 0.7
+    threshold = 0.3
 
     for file in file_list:
         # if '.withGrad.32k_fs_LR.Inner.vtk' not in file:
@@ -89,6 +89,7 @@ def create_morph_data_zero():
         surf = pyvista.read(file_path)
         Gradient_Density = surf['gradient_density']
         Gradient_Density = Gradient_Density - threshold
+        print(data_dir)
         fio.write_morph_data(os.path.join(data_dir, "%s.%s.grad.sulc"%(hemi, threshold)), Gradient_Density, fnum=327680)
 
     return
@@ -136,5 +137,6 @@ def rescale_feature():
     return
 
 if __name__ == "__main__":
-    rescale_feature()
+    # rescale_feature()
     # print("True")
+    create_morph_data_zero()
