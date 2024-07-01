@@ -2,7 +2,7 @@
 Author: HenryVarro666 1504517223@qq.com
 Date: 1969-12-31 19:00:00
 LastEditors: HenryVarro666 1504517223@qq.com
-LastEditTime: 2024-07-01 00:16:40
+LastEditTime: 2024-07-01 03:24:47
 FilePath: /DensityMap+GNN/gradient_generate.py
 '''
 import os
@@ -60,7 +60,7 @@ def create_morph_data():
         file_path = os.path.join(data_dir, file)
         surf = pyvista.read(file_path)
         Gradient_Density = surf['gradient_density']
-        fio.write_morph_data(os.path.join(data_dir, "%s.grad"%(hemi)), Gradient_Density, fnum=327680)
+        fio.write_morph_data(os.path.join(data_dir, "%s.grad.sulc"%(hemi)), Gradient_Density, fnum=327680)
 
     return
 
