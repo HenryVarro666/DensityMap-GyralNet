@@ -2,7 +2,7 @@
 Author: HenryVarro666 1504517223@qq.com
 Date: 1969-12-31 19:00:00
 LastEditors: HenryVarro666 1504517223@qq.com
-LastEditTime: 2024-07-01 08:43:08
+LastEditTime: 2024-07-03 15:31:40
 FilePath: /DensityMap+GNN/gradient_generate.py
 '''
 import os
@@ -11,7 +11,7 @@ import nibabel
 import hcp_utils
 import numpy as np
 from tqdm import tqdm
-from nibabel.freesurfer import io as fio
+import nibabel.freesurfer.io as io
 
 def write_vtk():
     """
@@ -61,10 +61,11 @@ def create_morph_data():
         file_path = os.path.join(data_dir, file)
         surf = pyvista.read(file_path)
         Gradient_Density = surf['gradient_density']
-        fio.write_morph_data(os.path.join(data_dir, "%s.grad.sulc"%(hemi)), Gradient_Density, fnum=327680)
+        file_path = os.path.join(data_dir, "%s.grad"%(hemi))
+        io.write_morph_data(file_path, Gradient_Density, fnum=327680)
+        print("Gradient Density has been written to ", file_path)
 
     return
-
 
 def create_morph_data_zero():
     """
@@ -90,7 +91,7 @@ def create_morph_data_zero():
         Gradient_Density = surf['gradient_density']
         Gradient_Density = Gradient_Density - threshold
         print(data_dir)
-        fio.write_morph_data(os.path.join(data_dir, "%s.%s.grad.sulc"%(hemi, threshold)), Gradient_Density, fnum=327680)
+        io.write_morph_data(os.path.join(data_dir, "%s.%s.grad.sulc"%(hemi, threshold)), Gradient_Density, fnum=327680)
 
     return
 
@@ -107,36 +108,38 @@ def rescale_feature():
     # for file in pbar:
     #     if '.withGrad.32k_fsaverage.flip.Sphere.vtk' not in file:
 
-    data_dir = "./100206/100206_recon/surf"
+    data_dir = "/mnt/d/DensityMap-GyralNet/32k_3subjects/100206/100206_recon/surf"
     file_list = os.listdir(data_dir)
 
     for file in file_list:
         if '.withGrad.32k_fs_LR.Inner.vtk' not in file:
             continue
-        subject_id = file.split('.')[0]
+        # subject_id = file.split('.')[0]
         hemi = None 
         if 'lh' in file:
             hemi = 'lh'
-        elif 'lh' in file:
+        elif 'rh' in file:
             hemi = 'rh'
 
         file_path = os.path.join(data_dir, file)
 
         sphere = pyvista.read(file_path)
-        sulc = sphere['gradient_density']
+        grad = sphere['gradient_density']
         
         # rescale sulc
         # max-min normalization
-        sulc = (sulc - np.min(sulc)) / (np.max(sulc) - np.min(sulc)) * (0.989 - (-0.4)) + (-0.4)
+        grad = (grad - np.min(grad)) / (np.max(grad) - np.min(grad)) * (0.989 - (-0.4)) + (-0.4)
 
-        sphere['gradient_density'] = sulc
+        sphere['gradient_density'] = grad
 
-        output_path = os.path.join(data_dir, f"{hemi}.grad.rescale.sulc")
-        fio.write_morph_data(output_path, sulc, fnum=327680)    
+        output_path = os.path.join(data_dir, f"{hemi}.rescale.grad")
+        io.write_morph_data(output_path, grad, fnum=327680)    
         # sphere.save(file_path.replace('.withGrad.164k_fsaverage.flip.Sphere.vtk', '.withGrad.164k_fsaverage.flip.rescale.Sphere.vtk'), binary=False)
+        print("Rescaled Gradient Density has been written to ", output_path)
+    
     return
 
 if __name__ == "__main__":
-    # rescale_feature()
+    rescale_feature()
     # print("True")
-    create_morph_data_zero()
+    create_morph_data()
