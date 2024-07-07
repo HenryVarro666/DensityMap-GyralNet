@@ -1,3 +1,11 @@
+'''
+Author: HenryVarro666 1504517223@qq.com
+Date: 1969-12-31 19:00:00
+LastEditors: HenryVarro666 1504517223@qq.com
+LastEditTime: 2024-07-02 14:05:03
+FilePath: /DensityMap-GyralNet/GDM_Test/backup/GDM_0.7.py
+Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+'''
 import vtk
 import nibabel.freesurfer.io as io
 from collections import defaultdict
