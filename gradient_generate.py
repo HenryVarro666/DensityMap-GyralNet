@@ -2,7 +2,7 @@
 Author: HenryVarro666 1504517223@qq.com
 Date: 1969-12-31 19:00:00
 LastEditors: HenryVarro666 1504517223@qq.com
-LastEditTime: 2024-07-07 12:30:09
+LastEditTime: 2024-07-07 12:32:29
 FilePath: /DensityMap+GNN/gradient_generate.py
 '''
 import os
@@ -187,7 +187,7 @@ if __name__ == "__main__":
     # data_path = "/mnt/d/DensityMap-GyralNet/32k_3subjects/100206/100206_recon/surf"
 
     root_path = "/mnt/d/DensityMap-GyralNet/32k_3subjects"
-    directories = [d for d in os.listdir(root_path) if os.path.isdir(os.path.join(root_path, d))]
+    directories = directories = [d for d in os.listdir(root_path) if os.path.isdir(os.path.join(root_path, d)) and d.isdigit()]
     for subject_id in directories:
         data_path = os.path.join(root_path, subject_id, f"{subject_id}_recon/surf")
         rescale_feature(data_path)
