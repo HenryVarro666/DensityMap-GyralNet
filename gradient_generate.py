@@ -180,7 +180,7 @@ def flip_feature():
 
         fio.write_morph_data(os.path.join(data_dir, "%s.%s.flip.sulc"%(subject_id, hemi)), sulc, fnum=327680)
         fio.write_morph_data(os.path.join(data_dir, "%s.%s.flip.curv"%(subject_id, hemi)), curv, fnum=327680)
-        sphere.save(file_path.replace('.withGrad.164k_fsaverage.Sphere.vtk', '.withGrad.164k_fsaverage.flip.Sphere.vtk'), binary=False)
+        # sphere.save(file_path.replace('.withGrad.164k_fsaverage.Sphere.vtk', '.withGrad.164k_fsaverage.flip.Sphere.vtk'), binary=False)
     return
 
 if __name__ == "__main__":
