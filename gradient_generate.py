@@ -2,7 +2,7 @@
 Author: HenryVarro666 1504517223@qq.com
 Date: 1969-12-31 19:00:00
 LastEditors: HenryVarro666 1504517223@qq.com
-LastEditTime: 2024-07-07 12:18:28
+LastEditTime: 2024-07-07 12:20:02
 FilePath: /DensityMap+GNN/gradient_generate.py
 '''
 import os
@@ -178,8 +178,8 @@ def flip_feature():
         sphere['sulc'] = sulc
         sphere['curv'] = curv
 
-        io.write_morph_data(os.path.join(data_dir, "%s.%s.flip.sulc"%(subject_id, hemi)), sulc, fnum=327680)
-        io.write_morph_data(os.path.join(data_dir, "%s.%s.flip.curv"%(subject_id, hemi)), curv, fnum=327680)
+        fio.write_morph_data(os.path.join(data_dir, "%s.%s.flip.sulc"%(subject_id, hemi)), sulc, fnum=327680)
+        fio.write_morph_data(os.path.join(data_dir, "%s.%s.flip.curv"%(subject_id, hemi)), curv, fnum=327680)
         sphere.save(file_path.replace('.withGrad.164k_fsaverage.Sphere.vtk', '.withGrad.164k_fsaverage.flip.Sphere.vtk'), binary=False)
     return
 
