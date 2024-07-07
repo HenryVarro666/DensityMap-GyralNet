@@ -33,7 +33,9 @@ def initialize_grad_data(orig_sphere_polydata, orig_surf_polydata, feature_file_
 
     print('Draw updated gradient_density colorful sphere:\t' + time.asctime(time.localtime(time.time())))
     feature_name_variable_dict = {'grad_data_raw': grad_data_raw,
+                                  'flip_grad_data_raw': flip_grad_data_raw,
                                   'grad_data_rescale': grad_data_rescale,
+                                  'flip_grad_data_rescale': flip_grad_data_rescale,
                                   'grad_data_binary': grad_data_binary,
                                   'grad_data_updated': grad_data_updated}
     sphere_output = os.path.join(output_prefix, "%s_sphere_feature_updated_rescale_%s.vtk"%(sphere,grad_threshold))
@@ -69,7 +71,7 @@ def write_thin_gyri_on_sphere_point_marginal_sulc_curv(orig_sphere_polydata,
                                                        orig_surf_polydata, 
                                                        point_neighbor_points_dict, 
                                                        grad_data_updated, 
-                                                       flip_grad_data_rescale,  
+                                                       flip_grad_data_rescale, 
                                                        output_prefix,
                                                        sphere,
                                                        threshold,
@@ -118,7 +120,7 @@ def write_thin_gyri_on_sphere_point_marginal_sulc_curv(orig_sphere_polydata,
                     # neighbor_points = point_neighbor_points_dict[point]
                     neighbor_points = [neighbor for neighbor in point_neighbor_points_dict[point]]
                     for neighbor_point in neighbor_points:
-                        if grad_data_updated[neighbor_point] < 0 and flip_grad_data_rescale[neighbor_point] >= current_grad:
+                        if grad_data_updated[neighbor_point] < 0 and flip_grad_data_rescale[neighbor_point] <= current_grad:
                             second_neighbors = point_neighbor_points_dict[neighbor_point]
                             marginal_gyri_num = 0
                             marginal_gyri_points = list()
@@ -158,8 +160,8 @@ def __main__():
     output_folder_name = "gdm_net"
     output_folder = os.path.join(root, subject_id, output_folder_name)
 
-    # clear_output_folder(output_folder)
-    check_output_folder(output_folder)
+    clear_output_folder(output_folder)
+    # check_output_folder(output_folder)
 
     # sphere_list = ["lh", "rh"]
     sphere_list = ["lh"]
@@ -186,7 +188,7 @@ def __main__():
         # featured_sphere(sphere_polydata, feature_file_dict_grad, os.path.join(output_folder, "%s_sphere_Test.vtk"%(sphere)))
         # featured_sphere(surf_polydata, feature_file_dict_grad, os.path.join(output_folder, "%s_surf_Test.vtk"%(sphere)))
 
-        grad_threshold = -0.2
+        grad_threshold = -0.5
         expend_step_size = 0.01
 
         print('Initialize grad data:\t' + time.asctime(time.localtime(time.time())))
@@ -210,7 +212,7 @@ def __main__():
                                                                             surf_polydata,
                                                                             point_neighbor_points_dict,
                                                                             grad_data_updated,
-                                                                            grad_data_rescale,
+                                                                            grad_data_rescale, 
                                                                             output_folder,
                                                                             sphere,
                                                                             grad_threshold,
