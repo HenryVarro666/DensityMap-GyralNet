@@ -115,32 +115,6 @@ def delete_isolated_point(point_num, point_neighbor_points_dict, sulc_data):
     return sulc_data
 
 
-def delete_isolated_point1(point_num, point_neighbor_points_dict, sulc_data):
-    for point in range(point_num):
-        sulc = sulc_data[point]
-        '''isolated point'''
-        nerighbor_sulcs = sulc_data[point_neighbor_points_dict[point]]
-        if sulc > 0 and np.sum(nerighbor_sulcs < 0) == nerighbor_sulcs.shape[0]:
-            sulc_data[point] = -1
-        elif sulc < 0 and np.sum(nerighbor_sulcs > 0) == nerighbor_sulcs.shape[0]:
-            sulc_data[point] = 1
-        '''isolated one-round patch'''
-        first_neighbor_list = point_neighbor_points_dict[point]
-        second_neighbor_list = list()
-        for first_neighbor in first_neighbor_list:
-            neighbors_of_first_round = point_neighbor_points_dict[first_neighbor]
-            for neighbor_of_first_round in neighbors_of_first_round:
-                if neighbor_of_first_round not in [point] + first_neighbor_list:
-                    second_neighbor_list.append(neighbor_of_first_round)
-        second_neighbor_list = list(set(second_neighbor_list))
-        if sulc > 0 and np.sum(sulc_data[second_neighbor_list] < 0) == len(second_neighbor_list):
-            sulc_data[[point] + first_neighbor_list] = -1
-        elif sulc < 0 and np.sum(sulc_data[second_neighbor_list] > 0) == len(second_neighbor_list):
-            sulc_data[[point] + first_neighbor_list] = 1
-
-    return sulc_data
-
-
 def find_marginal_point(points_list, point_neighbor_points_dict, sulc_data):
     marginal_points = list()
     marginal_points_gyri = list()
@@ -357,10 +331,12 @@ def initialize_sulc_data(orig_sphere_polydata, orig_surf_polydata, feature_file_
     updated_sulc_data = delete_isolated_point(point_num, point_neighbor_points_dict, updated_sulc_data)
 
     print('draw updated sulc colorful sphere:\t' + time.asctime(time.localtime(time.time())))
-    feature_name_variable_dict = {'thickness_data_raw': thickness_data_raw, 'thickness_de_noise': thickness_data,
+    feature_name_variable_dict = {'thickness_data_raw': thickness_data_raw, 
+                                  'thickness_de_noise': thickness_data,
                                   'sulc_data_raw': sulc_data_raw,
                                   'sulc_data_delete_thicknessZero': sulc_data_delete_thicknessZero,
-                                  'sulc_data_binary': sulc_data_binary, 'sulc_data_de_isolation': sulc_data,
+                                  'sulc_data_binary': sulc_data_binary, 
+                                  'sulc_data_de_isolation': sulc_data,
                                   'curv_data_raw': curv_data_raw,
                                   'curv_data_delete_thicknessZero': curv_data_delete_thicknessZero,
                                   'updated_sulc_data': updated_sulc_data}
