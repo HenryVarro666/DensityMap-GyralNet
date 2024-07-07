@@ -231,7 +231,8 @@ def __main__():
 
 
         Find_skelenton.find_skelenton(sphere_polydata, surf_polydata, point_patchSize_dict_updated, grad_data_updated,
-                           flip_grad_data_rescale, thin_sulc_data, point_neighbor_points_dict, point_connect_points_dict_thin_gyri_parts,
+                        #    flip_grad_data_rescale, thin_sulc_data, point_neighbor_points_dict, point_connect_points_dict_thin_gyri_parts,
+                           grad_data_rescale, thin_sulc_data, point_neighbor_points_dict, point_connect_points_dict_thin_gyri_parts,
                            connected_lines_list, father_dict, 
                            length_thres_of_long_gyri, 
                            neighbor_missing_path_smallest_step,
@@ -245,7 +246,8 @@ def __main__():
         skeleton_polydata = read_vtk_file(sphere_skelenton_connect_break_allpoints_path)
         Find_skelenton.find_skelenton_missing(sphere_polydata, surf_polydata, skeleton_polydata, 
                                 grad_data_updated,
-                                flip_grad_data_rescale,
+                                # flip_grad_data_rescale,
+                                grad_data_rescale,
                                 length_thres_of_long_gyri, 
                                 neighbor_missing_path_smallest_step,
                                 flat_threshold_for_convex_gyri,

@@ -2,7 +2,7 @@
 Author: HenryVarro666 1504517223@qq.com
 Date: 1969-12-31 19:00:00
 LastEditors: HenryVarro666 1504517223@qq.com
-LastEditTime: 2024-07-07 11:15:26
+LastEditTime: 2024-07-07 14:56:47
 FilePath: /DensityMap-GyralNet/GDM_Net/utils/skeleton.py
 '''
 import nibabel.freesurfer.io as io
@@ -700,6 +700,22 @@ class Find_skelenton:
             connected_lines_list.append([pointID1, pointID2])
         return connected_lines_list
 
+    def draw_3hinge_on_surf(surf_polydata, hinge3_list, output_3hinge_vertex):
+        points_new = vtk.vtkPoints()
+        vertices_new = vtk.vtkCellArray()
+        vertex_num = 0
+        for point in hinge3_list:
+            coordinate = surf_polydata.GetPoints().GetPoint(point)
+            points_new.InsertNextPoint(coordinate)
+            vertex = vtk.vtkVertex()
+            vertex.GetPointIds().SetId(0, vertex_num)
+            vertices_new.InsertNextCell(vertex)
+            vertex_num += 1
+        polygonPolyData = vtk.vtkPolyData()
+        polygonPolyData.SetPoints(points_new)
+        polygonPolyData.SetVerts(vertices_new)
+        polygonPolyData.Modified()
+        
     def find_skelenton_missing(orig_sphere_polydata, orig_surf_polydata, skeleton_polydata, curv_data_delete_thicknessZero, original_sulc_data, length_thres_of_long_gyri, neighbor_missing_path_smallest_step, flat_threshold_for_convex_gyri, nearest_skeleton_num, island_gyri_length_thres, output_prefix,sphere):
         print('================= build skeleton:\t' + time.asctime(time.localtime(time.time())) + '=======================')
         final_connection_list = Find_skelenton.read_connection_of_skelenton_file(skeleton_polydata)
