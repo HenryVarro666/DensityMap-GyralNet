@@ -2,7 +2,7 @@
 Author: HenryVarro666 1504517223@qq.com
 Date: 1969-12-31 19:00:00
 LastEditors: HenryVarro666 1504517223@qq.com
-LastEditTime: 2024-07-06 12:38:38
+LastEditTime: 2024-07-07 12:16:00
 FilePath: /DensityMap+GNN/gradient_generate.py
 '''
 import os
@@ -11,7 +11,7 @@ import nibabel
 import hcp_utils
 import numpy as np
 from tqdm import tqdm
-import nibabel.freesurfer.io as io
+import nibabel.freesurfer.io as fio
 
 def write_vtk():
     """
@@ -67,7 +67,7 @@ def create_morph_data(data_path):
         file_path = os.path.join(data_path, "%s.grad"%(hemi))
 
 
-        io.write_morph_data(file_path, Gradient_Density, fnum=327680)
+        fio.write_morph_data(file_path, Gradient_Density, fnum=327680)
         print("Gradient Density has been written to ", file_path)
 
     return
@@ -141,7 +141,7 @@ def rescale_feature(data_path):
         sphere['gradient_density'] = grad
 
         output_path = os.path.join(data_path, f"{hemi}.rescale.grad")
-        io.write_morph_data(output_path, grad, fnum=327680)    
+        fio.write_morph_data(output_path, grad, fnum=327680)    
         # sphere.save(file_path.replace('.withGrad.164k_fsaverage.flip.Sphere.vtk', '.withGrad.164k_fsaverage.flip.rescale.Sphere.vtk'), binary=False)
         print("Rescaled Gradient Density has been written to ", output_path)
     
