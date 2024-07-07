@@ -34,7 +34,9 @@ def initialize_grad_data(orig_sphere_polydata, orig_surf_polydata, feature_file_
 
     print('Draw updated gradient_density colorful sphere:\t' + time.asctime(time.localtime(time.time())))
     feature_name_variable_dict = {'grad_data_raw': grad_data_raw,
+                                  'flip_grad_data_raw': flip_grad_data_raw,
                                   'grad_data_rescale': grad_data_rescale,
+                                  'flip_grad_data_rescale': flip_grad_data_rescale,
                                   'grad_data_binary': grad_data_binary,
                                   'grad_data_updated': grad_data_updated}
     sphere_output = os.path.join(output_prefix, "%s_sphere_feature_updated_rescale_%s.vtk"%(sphere,grad_threshold))
