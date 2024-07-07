@@ -2,7 +2,7 @@
 Author: HenryVarro666 1504517223@qq.com
 Date: 1969-12-31 19:00:00
 LastEditors: HenryVarro666 1504517223@qq.com
-LastEditTime: 2024-07-07 12:20:02
+LastEditTime: 2024-07-07 12:26:47
 FilePath: /DensityMap+GNN/gradient_generate.py
 '''
 import os
@@ -185,6 +185,10 @@ def flip_feature():
 
 if __name__ == "__main__":
     data_path = "/mnt/d/DensityMap-GyralNet/32k_3subjects/100206/100206_recon/surf"
-    rescale_feature(data_path)
-    # print("True")
-    create_morph_data(data_path)
+
+    root_path = "/mnt/d/DensityMap-GyralNet/32k_3subjects"
+    for subject_id in os.listdir(root_path):
+        data_path = os.path.join(root_path, subject_id, f"{subject_id}_recon/surf")
+        rescale_feature(data_path)
+        # print("True")
+        create_morph_data(data_path)
