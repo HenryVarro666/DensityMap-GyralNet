@@ -2,7 +2,7 @@
 Author: HenryVarro666 1504517223@qq.com
 Date: 1969-12-31 19:00:00
 LastEditors: HenryVarro666 1504517223@qq.com
-LastEditTime: 2024-07-07 14:56:47
+LastEditTime: 2024-07-07 15:00:34
 FilePath: /DensityMap-GyralNet/GDM_Net/utils/skeleton.py
 '''
 import nibabel.freesurfer.io as io
@@ -715,7 +715,83 @@ class Find_skelenton:
         polygonPolyData.SetPoints(points_new)
         polygonPolyData.SetVerts(vertices_new)
         polygonPolyData.Modified()
-        
+    
+    def find_convex_marginal_points_of_long_gyri(orig_sphere_polydata, final_point_lines_dict, point_neighbor_points_dict, point_connect_points_dict_gyri_parts, marginal_points_gyri, original_sulc_data, curv_data_delete_thicknessZero, point_patchSize_dict_orig, length_thres_of_long_gyri, nearest_skeleton_num, island_gyri_length_thres):
+        print('find convex marginal points of long gyri  \t' + time.asctime(time.localtime(time.time())))
+        convex_marginal_points_gyri = list()
+        for point in marginal_points_gyri:
+            first_gyri_neighbor = [first_neighbor for first_neighbor in point_neighbor_points_dict[point] if original_sulc_data[first_neighbor] < 0]
+            first_sulc_neighbor = [first_neighbor for first_neighbor in point_neighbor_points_dict[point] if original_sulc_data[first_neighbor] > 0]
+            if (len(first_gyri_neighbor) - 2 < len(first_sulc_neighbor)) and curv_data_delete_thicknessZero[point] < 0:
+                convex_marginal_points_gyri.append(point)
+        convex_marginal_points_length_dict = defaultdict(list)
+        long_convax_marginal_points_list = list()
+        island_convex_marginal_points_length_dict = defaultdict(list)
+        for convex_marginal_point in convex_marginal_points_gyri:
+            from_marginal_to_skelenton_father_sons_dict = defaultdict(list)
+            from_skelenton_to_marginal_son_fathers_dict = defaultdict(list)
+            path = 0
+            reach_skelenton = 0
+            max_step_after_reach_skelenton = 6
+            skelenton_point_set = set()
+            current_outer_points_list = list()
+            current_outer_points_list.append(convex_marginal_point)
+            while max_step_after_reach_skelenton and (not reach_skelenton):
+                next_outer_points_list = list()
+                for point in current_outer_points_list:
+                    neighbors = [neighbor for neighbor in point_connect_points_dict_gyri_parts[point] if neighbor not in from_marginal_to_skelenton_father_sons_dict.keys() and neighbor not in current_outer_points_list and curv_data_delete_thicknessZero[neighbor] < 0]
+                    if point in from_marginal_to_skelenton_father_sons_dict.keys():
+                        print('from_marginal_to_skelenton_father_sons_dict error!')
+                    else:
+                        from_marginal_to_skelenton_father_sons_dict[point] = neighbors
+                    for neighbor in neighbors:
+                        if neighbor not in from_skelenton_to_marginal_son_fathers_dict.keys():
+                            from_skelenton_to_marginal_son_fathers_dict[neighbor] = [point]
+                        else:
+                            from_skelenton_to_marginal_son_fathers_dict[neighbor].append(point)
+
+                    next_outer_points_list = next_outer_points_list + neighbors
+
+                if len(next_outer_points_list):
+
+                    path = path + 1
+
+                    # test single point
+                    # if convex_marginal_point == 71363:
+                    #     draw_3hinge_on_surf(orig_sphere_polydata, next_outer_points_list,
+                    #                         output_prefix + '_71363_path_' + str(path) + '.vtk')
+                    #     print(path)
+
+                    skelenton_point_set = skelenton_point_set | (set(next_outer_points_list) & set(final_point_lines_dict.keys()))
+                    if skelenton_point_set:
+                        if max_step_after_reach_skelenton == 6:
+                            real_path = path
+                            averaged_patchSize = 0
+                            for skelenton_point in skelenton_point_set:
+                                averaged_patchSize = averaged_patchSize + point_patchSize_dict_orig[skelenton_point]
+                            averaged_patchSize = averaged_patchSize / len(skelenton_point_set)
+                        max_step_after_reach_skelenton -= 1
+                    if len(skelenton_point_set) >= nearest_skeleton_num:
+                        reach_skelenton = 1
+                        if real_path - averaged_patchSize > length_thres_of_long_gyri:
+                            convex_marginal_points_length_dict[convex_marginal_point] = [real_path, from_marginal_to_skelenton_father_sons_dict, from_skelenton_to_marginal_son_fathers_dict]
+                            long_convax_marginal_points_list.append(convex_marginal_point)
+                    else:
+                        current_outer_points_list = set(next_outer_points_list)
+                else:
+                    if path > island_gyri_length_thres:
+                        island_convex_marginal_points_length_dict[convex_marginal_point] = [path, from_marginal_to_skelenton_father_sons_dict, from_skelenton_to_marginal_son_fathers_dict]
+                    break
+
+        return long_convax_marginal_points_list, convex_marginal_points_length_dict, island_convex_marginal_points_length_dict
+
+    def create_3hinge(final_point_lines_dict):
+        hinge3_list = list()
+        for point in final_point_lines_dict.keys():
+            if len(final_point_lines_dict[point]) >= 3:
+                hinge3_list.append(point)
+        return hinge3_list
+    
     def find_skelenton_missing(orig_sphere_polydata, orig_surf_polydata, skeleton_polydata, curv_data_delete_thicknessZero, original_sulc_data, length_thres_of_long_gyri, neighbor_missing_path_smallest_step, flat_threshold_for_convex_gyri, nearest_skeleton_num, island_gyri_length_thres, output_prefix,sphere):
         print('================= build skeleton:\t' + time.asctime(time.localtime(time.time())) + '=======================')
         final_connection_list = Find_skelenton.read_connection_of_skelenton_file(skeleton_polydata)
