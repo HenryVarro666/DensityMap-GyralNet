@@ -241,7 +241,8 @@ def __main__():
 
         sphere_skelenton_connect_break_allpoints_path = os.path.join(output_folder, "%s_sphere_skelenton_connect_break_allpoints.vtk"%(sphere))
         skeleton_polydata = read_vtk_file(sphere_skelenton_connect_break_allpoints_path)
-        Find_skelenton.find_skelenton_missing(sphere_polydata, surf_polydata, skeleton_polydata, grad_data_updated,
+        Find_skelenton.find_skelenton_missing(sphere_polydata, surf_polydata, skeleton_polydata, 
+                                grad_data_updated,
                                 flip_grad_data_rescale,
                                 length_thres_of_long_gyri, 
                                 neighbor_missing_path_smallest_step,
