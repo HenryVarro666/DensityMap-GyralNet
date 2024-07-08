@@ -151,7 +151,7 @@ def write_thin_gyri_on_sphere_point_marginal_sulc_curv(orig_sphere_polydata,
 
 
 def __main__():
-    grad_threshold = -0.25
+    grad_threshold = -0.5
     expend_step_size = 0.01
 
     # root = "/home/lab/Documents/DensityMap-GyralNet/32k_3subjects"

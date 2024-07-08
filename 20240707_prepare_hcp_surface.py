@@ -1,3 +1,10 @@
+'''
+Author: HenryVarro666 1504517223@qq.com
+Date: 1969-12-31 19:00:00
+LastEditors: HenryVarro666 1504517223@qq.com
+LastEditTime: 2024-07-08 09:12:21
+FilePath: /DensityMap-GyralNet/20240707_prepare_hcp_surface.py
+'''
 import os
 import pyvista
 import nibabel

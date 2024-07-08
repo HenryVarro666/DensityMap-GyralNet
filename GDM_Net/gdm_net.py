@@ -23,11 +23,13 @@ def initialize_grad_data(orig_sphere_polydata, orig_surf_polydata, feature_file_
     grad_data_raw = io.read_morph_data(feature_file_dict_grad['gradient_density'])
     flip_grad_data_raw = -grad_data_raw
 
-    grad_data_rescale = io.read_morph_data(feature_file_dict_grad['recale_gradient_density'])
+    grad_data_rescale = io.read_morph_data(feature_file_dict_grad['rescale_gradient_density'])
 
     flip_grad_data_rescale = -grad_data_rescale
 
     grad_data_binary = np.where(flip_grad_data_rescale <= grad_threshold, -1, 1)
+    # grad_data_binary = np.where(flip_grad_data_raw <= grad_threshold, -1, 1)
+
 
     grad_data_updated = delete_isolated_point(point_num, point_neighbor_points_dict, grad_data_binary)
 
@@ -71,7 +73,7 @@ def write_thin_gyri_on_sphere_point_marginal_sulc_curv(orig_sphere_polydata,
                                                        orig_surf_polydata, 
                                                        point_neighbor_points_dict, 
                                                        grad_data_updated, 
-                                                       flip_grad_data_rescale, 
+                                                       flip_grad_data_rescale,  
                                                        output_prefix,
                                                        sphere,
                                                        threshold,
@@ -120,7 +122,7 @@ def write_thin_gyri_on_sphere_point_marginal_sulc_curv(orig_sphere_polydata,
                     # neighbor_points = point_neighbor_points_dict[point]
                     neighbor_points = [neighbor for neighbor in point_neighbor_points_dict[point]]
                     for neighbor_point in neighbor_points:
-                        if grad_data_updated[neighbor_point] < 0 and flip_grad_data_rescale[neighbor_point] <= current_grad:
+                        if grad_data_updated[neighbor_point] < 0 and flip_grad_data_rescale[neighbor_point] >= current_grad:
                             second_neighbors = point_neighbor_points_dict[neighbor_point]
                             marginal_gyri_num = 0
                             marginal_gyri_points = list()
@@ -150,6 +152,10 @@ def write_thin_gyri_on_sphere_point_marginal_sulc_curv(orig_sphere_polydata,
 
 
 def __main__():
+    
+    grad_threshold = -0.4
+    expend_step_size = 0.01
+
     # root = "./"
     root = "/mnt/d/DensityMap-GyralNet/32k_3subjects"
 
@@ -157,11 +163,11 @@ def __main__():
     subject_folder = os.path.join(root, subject_id, subject_id + "_recon", "surf")
     print("Subject folder: %s"%(subject_folder))
 
-    output_folder_name = "gdm_net"
+    output_folder_name = str(subject_id) + "_gdm_net_" + str(grad_threshold)
     output_folder = os.path.join(root, subject_id, output_folder_name)
 
-    clear_output_folder(output_folder)
-    # check_output_folder(output_folder)
+    # clear_output_folder(output_folder)
+    check_output_folder(output_folder)
 
     # sphere_list = ["lh", "rh"]
     sphere_list = ["lh"]
@@ -182,14 +188,12 @@ def __main__():
         rescale_grad_file = os.path.join(subject_folder, "%s.rescale.grad"%(sphere))
 
 
-        feature_file_dict_grad =  {'recale_gradient_density': rescale_grad_file,
+        feature_file_dict_grad =  {'rescale_gradient_density': rescale_grad_file,
                                    'gradient_density': grad_file}
 
         # featured_sphere(sphere_polydata, feature_file_dict_grad, os.path.join(output_folder, "%s_sphere_Test.vtk"%(sphere)))
         # featured_sphere(surf_polydata, feature_file_dict_grad, os.path.join(output_folder, "%s_surf_Test.vtk"%(sphere)))
 
-        grad_threshold = -0.5
-        expend_step_size = 0.01
 
         print('Initialize grad data:\t' + time.asctime(time.localtime(time.time())))
 
@@ -212,7 +216,7 @@ def __main__():
                                                                             surf_polydata,
                                                                             point_neighbor_points_dict,
                                                                             grad_data_updated,
-                                                                            grad_data_rescale, 
+                                                                            grad_data_rescale,
                                                                             output_folder,
                                                                             sphere,
                                                                             grad_threshold,
