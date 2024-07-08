@@ -21,6 +21,7 @@ def initialize_grad_data(orig_sphere_polydata, orig_surf_polydata, feature_file_
     point_num = orig_sphere_polydata.GetNumberOfPoints()
 
     grad_data_raw = io.read_morph_data(feature_file_dict_grad['gradient_density'])
+    
     flip_grad_data_raw = -grad_data_raw
 
     grad_data_rescale = io.read_morph_data(feature_file_dict_grad['recale_gradient_density'])
@@ -148,15 +149,23 @@ def write_thin_gyri_on_sphere_point_marginal_sulc_curv(orig_sphere_polydata,
 
 
 def __main__():
-    # root = "./"
-    root = "/mnt/d/DensityMap-GyralNet/32k_3subjects"
+    grad_threshold = -0.2
+    expend_step_size = 0.01
 
-    subject_id = "100206"
-    subject_folder = os.path.join(root, subject_id, subject_id + "_recon", "surf")
-    print("Subject folder: %s"%(subject_folder))
+    # root = "/home/lab/Documents/DensityMap-GyralNet/32k_3subjects"
 
-    output_folder_name = "gdm_net"
-    output_folder = os.path.join(root, subject_id, output_folder_name)
+    # directories = [d for d in os.listdir(root) if os.path.isdir(os.path.join(root, d)) and d.isdigit()]
+    # for subject_id in directories:
+    #     subject_id = str(subject_folder)
+    #     subject_folder = os.path.join(root, subject_id, subject_id + "_recon", "surf")
+    #     print("Subject folder: %s"%(subject_folder))
+
+    root = os.getcwd()
+    subject_id = str(os.path.basename(root))
+    print(subject_id)
+    subject_folder = os.path.join(root, subject_id + "_recon", "surf")
+    output_folder_name = subject_id +"_gdm_net_" + str(grad_threshold)
+    output_folder = os.path.join(root, output_folder_name)
 
     # clear_output_folder(output_folder)
     check_output_folder(output_folder)
@@ -181,24 +190,22 @@ def __main__():
 
 
         feature_file_dict_grad =  {'recale_gradient_density': rescale_grad_file,
-                                   'gradient_density': grad_file}
+                                'gradient_density': grad_file}
 
         # featured_sphere(sphere_polydata, feature_file_dict_grad, os.path.join(output_folder, "%s_sphere_Test.vtk"%(sphere)))
         # featured_sphere(surf_polydata, feature_file_dict_grad, os.path.join(output_folder, "%s_surf_Test.vtk"%(sphere)))
 
-        grad_threshold = -0.2
-        expend_step_size = 0.01
 
         print('Initialize grad data:\t' + time.asctime(time.localtime(time.time())))
 
         # Binary
         grad_data_raw, flip_grad_data_raw, grad_data_rescale, flip_grad_data_rescale, grad_data_binary, grad_data_updated= initialize_grad_data(sphere_polydata, 
-                             surf_polydata, 
-                             feature_file_dict_grad, 
-                             point_neighbor_points_dict, 
-                             output_folder, 
-                             sphere, 
-                             grad_threshold) 
+                            surf_polydata, 
+                            feature_file_dict_grad, 
+                            point_neighbor_points_dict, 
+                            output_folder, 
+                            sphere, 
+                            grad_threshold) 
         
         print('Calculate patchsize for each gyri point:\t' + time.asctime(time.localtime(time.time())))
         point_patchSize_dict_updated = find_the_patchSize_of_gyri_point(grad_data_updated, point_neighbor_points_dict)
@@ -229,15 +236,15 @@ def __main__():
 
 
         Find_skelenton.find_skelenton(sphere_polydata, surf_polydata, point_patchSize_dict_updated, grad_data_updated,
-                           flip_grad_data_rescale, thin_sulc_data, point_neighbor_points_dict, point_connect_points_dict_thin_gyri_parts,
-                           connected_lines_list, father_dict, 
-                           length_thres_of_long_gyri, 
-                           neighbor_missing_path_smallest_step,
-                           flat_threshold_for_convex_gyri, 
-                           nearest_skeleton_num, 
-                           island_gyri_length_thres,
-                           output_folder, 
-                           sphere)
+                        flip_grad_data_rescale, thin_sulc_data, point_neighbor_points_dict, point_connect_points_dict_thin_gyri_parts,
+                        connected_lines_list, father_dict, 
+                        length_thres_of_long_gyri, 
+                        neighbor_missing_path_smallest_step,
+                        flat_threshold_for_convex_gyri, 
+                        nearest_skeleton_num, 
+                        island_gyri_length_thres,
+                        output_folder, 
+                        sphere)
 
         sphere_skelenton_connect_break_allpoints_path = os.path.join(output_folder, "%s_sphere_skelenton_connect_break_allpoints.vtk"%(sphere))
         skeleton_polydata = read_vtk_file(sphere_skelenton_connect_break_allpoints_path)

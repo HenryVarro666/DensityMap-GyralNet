@@ -189,6 +189,6 @@ if __name__ == "__main__":
     directories = directories = [d for d in os.listdir(root_path) if os.path.isdir(os.path.join(root_path, d)) and d.isdigit()]
     for subject_id in directories:
         data_path = os.path.join(root_path, subject_id, f"{subject_id}_recon/surf")
+        create_morph_data(data_path)
         rescale_feature(data_path)
         # print("True")
-        create_morph_data(data_path)
