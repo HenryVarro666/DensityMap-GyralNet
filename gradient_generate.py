@@ -141,7 +141,6 @@ def rescale_feature(data_path):
 
         output_path = os.path.join(data_path, f"{hemi}.rescale.grad")
         fio.write_morph_data(output_path, grad, fnum=327680)    
-        # sphere.save(file_path.replace('.withGrad.164k_fsaverage.flip.Sphere.vtk', '.withGrad.164k_fsaverage.flip.rescale.Sphere.vtk'), binary=False)
         print("Rescaled Gradient Density has been written to ", output_path)
     
     return
