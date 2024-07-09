@@ -2,7 +2,7 @@
 Author: HenryVarro666 1504517223@qq.com
 Date: 1969-12-31 19:00:00
 LastEditors: HenryVarro666 1504517223@qq.com
-LastEditTime: 2024-07-08 09:41:30
+LastEditTime: 2024-07-08 11:36:01
 FilePath: /DensityMap+GNN/gradient_generate.py
 '''
 import os
@@ -12,6 +12,7 @@ import hcp_utils
 import numpy as np
 from tqdm import tqdm
 import nibabel.freesurfer.io as fio
+import argparse
 
 def create_morph_data(data_path):
     """
@@ -90,12 +91,12 @@ def rescale_feature(data_path):
     return
 
 if __name__ == "__main__":
-    # data_path = "/mnt/d/DensityMap-GyralNet/32k_3subjects/100206/100206_recon/surf"
+    parser = argparse.ArgumentParser(description="Generate gradient for subject")
+    parser.add_argument("--subject_recon_dir", type=str, required=True, help="Subject ID")
+    args = parser.parse_args()
 
-    root_path = "/mnt/d/DensityMap-GyralNet/32k_3subjects"
-    directories = directories = [d for d in os.listdir(root_path) if os.path.isdir(os.path.join(root_path, d)) and d.isdigit()]
-    for subject_id in directories:
-        data_path = os.path.join(root_path, subject_id, f"{subject_id}_recon/surf")
-        create_morph_data(data_path)
-        rescale_feature(data_path)
-        # print("True")
+    subject_recon_dir = args.subject_recon_dir
+    data_path = subject_recon_dir
+    
+    create_morph_data(data_path)
+    rescale_feature(data_path)

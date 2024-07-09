@@ -20,6 +20,22 @@ def gyralnet_generate():
                 os.system(cmd)
     return
 
+def feature_generate():
+    data_dir = "/work/users/c/h/chaocao/HCP_structure_FromFenqiang"
+    subject_list = os.listdir(data_dir)
+    pbar = tqdm(subject_list)
+    for subject in pbar:
+        output_path = os.path.join(data_dir, subject, subject +  "_GDM_net")
+        subject_recon_dir = os.path.join(data_dir, subject, subject + "_recon", "surf")
+        # for hemi in ["lh", "rh"]:
+            # sphere_file = os.path.join(subject_recon_dir, "%s.%s.SpheSurf.RegByFS.Resp163842.vtk"%(subject, hemi))
+        if os.path.exists(subject_recon_dir):
+            # cmd = "python ResampleFeatureAndLabel.py --orig_sphe %s --template %s --feats %s --out_name %s" % (lh_file, template, feats, save_path)
+            cmd = "sbatch -p general -N 1 -n 1 --mem=16g -t 01:00:00 --wrap=\"python sbtach_longleaf.py --subject_recon_dir %s \"" % (subject_recon_dir)
+            print(cmd)
+            os.system(cmd)
+    return
+
 if __name__ == "__main__":
-    gyralnet_generate()
+    feature_generate()
     

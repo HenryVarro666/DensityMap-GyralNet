@@ -153,7 +153,7 @@ def write_thin_gyri_on_sphere_point_marginal_sulc_curv(orig_sphere_polydata,
 
 def __main__():
     
-    grad_threshold = -0.4
+    grad_threshold = -0.6
     expend_step_size = 0.01
 
     # root = "./"
