@@ -13,6 +13,20 @@
 
 </div>
 
+<!-- problem-framing:start -->
+
+## 问题与验证
+
+> **在相同皮层表面输入下，脑回骨架补全能否提高连接结构的一致性，同时避免添加缺乏几何依据的连接？**
+
+**为什么值得解决：** 下游图分析依赖稳定的节点与边。骨架断裂或错误连接会改变网络结构，即使可视化外观仍然合理。
+
+**核心矛盾：** 补全断裂可以提高连通性，也可能连接原本不相邻的结构。更完整的图不一定更准确。
+
+[完整问题与验证方案](PROBLEM.md)
+
+<!-- problem-framing:end -->
+
 ## Highlights
 
 - **What it builds:** the *gyral net* — the gyral crests traced over the cortical surface — and its **3-hinge gyri**, the three-way crest junctions that act as fine-scale cortical hubs.
