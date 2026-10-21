@@ -1,10 +1,51 @@
-<!--
- * @Author: HenryVarro666 1504517223@qq.com
- * @Date: 1969-12-31 19:00:00
- * @LastEditors: HenryVarro666 1504517223@qq.com
- * @LastEditTime: 2024-07-01 04:33:48
- * @FilePath: /DensityMap+GNN/README.md
--->
+# DensityMap-GyralNet
+
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/overview-dark.svg">
+    <img src="docs/overview-light.svg" alt="Overview: a folded cortical surface with sulcal depth is reduced to its gyral crests, which form a graph whose three-way junctions are 3-hinge gyri" width="560">
+  </picture>
+</p>
+
+Extracts the **gyral net** from cortical surfaces: the network of gyral crests whose three-way
+junctions are **3-hinge gyri** (3HGs), a fine-scale cortical folding landmark. The pipeline reads
+VTK surface meshes together with sulcal depth, isolates the gyral regions, skeletonizes them along
+shortest paths, repairs missing crest links and marks the 3-hinge vertices. It was run on Human
+Connectome Project surfaces resampled to the 32k mesh.
+
+## What's in the repository
+
+| Path | Purpose |
+|---|---|
+| `gyralnet.py`, `gyralnet_test2.py` | Gyral-net extraction for a range of subjects (skeleton, missing-crest repair, 3-hinge detection) |
+| `GDM_Net/` | Gradient-density-map variant of the pipeline and its utilities (`utils/`: skeleton processing, VTK I/O, drawing, trees) |
+| `20240707_prepare_hcp_surface.py`, `20240608_prepare_hcp_fmri.py` | HCP surface and fMRI preparation |
+| `32k_gradient_generate.py` | Gradient features on the 32k mesh |
+| `draw_3h_sphere_single_vtk.py` | Draw 3-hinge points on a sphere / surface VTK |
+| `sbatch_*.py`, `3h_generate_zl.sh` | Batch submission on a Slurm cluster |
+
+## Run
+
+```bash
+pip install vtk nibabel numpy networkx
+python3 gyralnet.py --root_dir="$PWD" --subject_list_start_id=<id> --subject_list_end_id=<id+1> \
+    --input_dir="<id>_recon" --out_dir=gyralnet_island_32k_flip
+```
+
+## Related work on gyral folding
+
+- C. Cao\*, T. Chen\*, N. Zhao\*, et al. *Gyral-Sulcal-Net: An Integrated Network Representation of Brain
+  Folding Patterns.* IEEE ISBI 2026. [arXiv:2601.08818](https://arxiv.org/abs/2601.08818)
+- C. Cao\*, J. Cheng\*, et al. *Deep-GyralNet: Enabling Machine Learning in Gyral Folding Pattern Extraction
+  on Cortical Surface.* IEEE ISBI 2026. [doi:10.1109/ISBI61048.2026.11515596](https://doi.org/10.1109/ISBI61048.2026.11515596)
+- C. Cao, X. Yu, L. Zhang, et al. *Enhancing Group-Wise Consistency in 3-Hinge Gyrus Matching via Anatomical
+  Embedding and Structural Connectivity Optimization.* IEEE ISBI 2024. [doi:10.1109/ISBI56570.2024.10635893](https://doi.org/10.1109/ISBI56570.2024.10635893)
+
+All papers, with figures and summaries: [ccao2679.com/publications](https://www.ccao2679.com/publications/)
+
+---
+
+## 中文说明（原始笔记）
 
 `tmp.py` 是一个处理大脑皮层表面数据的脚本，包含了多个功能模块。下面是对其主要功能和结构的概述：
 
