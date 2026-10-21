@@ -5,3 +5,9 @@
 100408/
 TestOutput/
 32k_3subjects.zip
+
+# OS, editor and Python caches
+.DS_Store
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
