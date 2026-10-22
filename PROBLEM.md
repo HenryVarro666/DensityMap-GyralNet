@@ -1,13 +1,15 @@
-# 研究问题
+# Research question
 
-> **在相同皮层表面输入下，脑回骨架补全能否提高连接结构的一致性，同时避免添加缺乏几何依据的连接？**
+> **Given the same cortical surface input, can completing broken gyral skeletons make the network's connectivity more consistent without adding links that the geometry does not support?**
 
-**为什么值得解决：** 下游图分析依赖稳定的节点与边。骨架断裂或错误连接会改变网络结构，即使可视化外观仍然合理。
+**Why it matters:** Downstream graph analysis depends on stable nodes and edges. A broken skeleton or a wrong link changes the network's structure even when the visualisation still looks plausible.
 
-**核心矛盾：** 补全断裂可以提高连通性，也可能连接原本不相邻的结构。更完整的图不一定更准确。
+**Central tension:** Repairing breaks raises connectivity, but it can also join structures that are not actually adjacent. A more complete graph is not necessarily a more accurate one.
 
-**已有证据与缺口：** [README.md](README.md) 描述表面读取、孤立点处理、骨架创建与缺失连接补全。该说明提供方法入口，但没有建立补全相对未补全的独立准确性证据。
+**Current evidence and gap:** [README.md](README.md) describes surface reading, isolated-point handling, skeleton creation and missing-link repair. That documents how the method runs, but it does not establish independent evidence that the repaired graph is more accurate than the unrepaired one.
 
-**最小决定性实验：** 固定表面与参数范围，对比不补全和当前补全流程；在已知人工删边及受控网格扰动下检查恢复率、误连率和拓扑稳定性，并对独立样本做盲审。调参对象与最终评测对象分开。若改善只体现为边数增加或依赖单一网格，应收窄方法主张。
+**Smallest decisive experiment:** Fix the surfaces and parameter ranges and compare no repair with the current repair step. Under known, deliberately deleted edges and controlled mesh perturbations, measure recovery rate, false-link rate and topological stability, and have an independent sample reviewed blind. Keep the data used for tuning apart from the data used for the final evaluation. If the improvement shows up only as more edges, or depends on a single mesh, narrow the claim about the method.
 
-以上为待验证问题，不新增测量结果。
+This states a question to be tested; it adds no new measurements.
+
+中文版：[PROBLEM.zh.md](PROBLEM.zh.md)

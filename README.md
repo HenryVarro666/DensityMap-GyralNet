@@ -15,15 +15,15 @@
 
 <!-- problem-framing:start -->
 
-## 问题与验证
+## Problem and evidence
 
-> **在相同皮层表面输入下，脑回骨架补全能否提高连接结构的一致性，同时避免添加缺乏几何依据的连接？**
+> **Given the same cortical surface input, can completing broken gyral skeletons make the network's connectivity more consistent without adding links that the geometry does not support?**
 
-**为什么值得解决：** 下游图分析依赖稳定的节点与边。骨架断裂或错误连接会改变网络结构，即使可视化外观仍然合理。
+**Why it matters:** Downstream graph analysis depends on stable nodes and edges. A broken skeleton or a wrong link changes the network's structure even when the visualisation still looks plausible.
 
-**核心矛盾：** 补全断裂可以提高连通性，也可能连接原本不相邻的结构。更完整的图不一定更准确。
+**Central tension:** Repairing breaks raises connectivity, but it can also join structures that are not actually adjacent. A more complete graph is not necessarily a more accurate one.
 
-[完整问题与验证方案](PROBLEM.md)
+[Full problem and verification plan](PROBLEM.md) · [中文](PROBLEM.zh.md)
 
 <!-- problem-framing:end -->
 
