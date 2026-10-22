@@ -2,6 +2,8 @@
 
 # DensityMap-GyralNet
 
+**English** · [简体中文](README.zh-CN.md)
+
 **Extract the gyral net and its 3-hinge gyri from cortical surface meshes, driven by sulcal depth or by gradient-density maps.**
 
 ![Python](https://img.shields.io/badge/Python-3-3776AB?logo=python&logoColor=white)
@@ -30,9 +32,51 @@
 ## Highlights
 
 - **What it builds:** the *gyral net* — the gyral crests traced over the cortical surface — and its **3-hinge gyri**, the three-way crest junctions that act as fine-scale cortical hubs.
-- **In and out:** VTK surface and sphere meshes with per-vertex sulcal depth and curvature in; gyral skeletons, 3-hinge vertices and graph files (VTK) out.
+- **In and out:** VTK surface and sphere meshes with per-vertex sulcal depth, curvature and cortical thickness in; gyral skeletons, 3-hinge vertices and graph files (VTK) out.
 - **Why “DensityMap”:** besides the classic sulcal-depth route (`gyralnet.py`), `GDM_Net/` builds the same net from gradient-density maps on the 32k mesh, which is where the repository's name comes from.
-- **Scale:** one job per subject, submitted through Slurm; used on Human Connectome Project surfaces resampled to the 32k mesh.
+- **Scale:** one run per subject, spread over CPU cores with GNU `parallel` (`3h_generate_zl.sh`); used on Human Connectome Project surfaces (164k fsaverage by default, 32k fs_LR in `GDM_Net/`). The Slurm scripts prepare surfaces and gradient features.
+
+## Architecture
+
+```mermaid
+flowchart TD
+    subgraph IN["Inputs per hemisphere"]
+        MESH["sphere + inner surface<br/>*.withGrad.*.vtk"]
+        MORPH["sulc · curv · thickness<br/>FreeSurfer morph files"]
+    end
+
+    GEN["32k_gradient_generate.py<br/>.grad, .rescale.grad"]
+
+    subgraph SPLIT["Gyri / sulci split"]
+        SULC["gyralnet.py<br/>sulc sign + curv fixes"]
+        GDM["GDM_Net/gdm_net.py<br/>threshold gradient density"]
+    end
+
+    subgraph SKEL["Shared skeleton steps"]
+        ISO["delete_isolated_point<br/>isolated-point cleanup"]
+        THIN["thin gyri<br/>erode from margins"]
+        TREE["create_tree<br/>grow by patch size"]
+        TRIM["trim short branches<br/>reconnect breaks"]
+        MISS["missing-link repair<br/>Dijkstra shortest paths"]
+        HINGE["create_3hinge<br/>skeleton degree ≥ 3"]
+    end
+
+    OUT1["*_skelenton_allpoints_final.vtk<br/>sphere + surface"]
+    OUT2["*_3hinge_vertex.vtk<br/>*_3hinge_ids.txt"]
+
+    MESH --> SULC
+    MORPH --> SULC
+    MESH -->|gradient_density| GEN
+    GEN --> GDM
+    MESH --> GDM
+    SULC --> ISO
+    GDM --> ISO
+    ISO --> THIN --> TREE --> TRIM --> MISS --> HINGE
+    MISS --> OUT1
+    HINGE --> OUT2
+```
+
+Read top to bottom: the two scripts in the middle differ in how they label each vertex gyral or sulcal (sulcal depth corrected by curvature in `gyralnet.py`, a thresholded gradient-density map in `GDM_Net/gdm_net.py`); from the isolated-point cleanup on, both run the same skeleton code, which `GDM_Net/utils/` repackages. Each step also writes intermediate VTK files (features, patch size, thinned gyri, initial tree and skeleton) next to the final outputs.
 
 ## How it works
 
@@ -40,7 +84,7 @@
 |---|---|---|
 | 1. Read | Load the surface, sphere and per-vertex features; build vertex neighbourhoods | `read_vtk_file`, `get_connect_points` |
 | 2. Isolate | Split gyri from sulci with sulcal depth and curvature, drop isolated vertices, find marginal points | `initialize_sulc_data`, `delete_isolated_point`, `find_marginal_point` |
-| 3. Skeletonize | Grow a skeleton tree per gyral region along shortest paths, then repair missing crest links | `create_tree`, `find_skelenton`, `create_connection_for_missing_gyri` |
+| 3. Skeletonize | Thin each gyral region from its margins, grow a skeleton tree from the vertex with the largest patch, trim short branches, then repair missing crest links along Dijkstra shortest paths | `create_tree`, `find_skelenton`, `create_connection_for_missing_gyri` |
 | 4. Mark | Write skeletons and 3-hinge vertices back to VTK on the sphere and the surface | `write_skelenton_by_connectionPair`, `draw_3h_sphere_single_vtk.py` |
 
 ## Quick start
@@ -49,7 +93,7 @@
 pip install vtk nibabel numpy networkx
 python3 gyralnet.py --root_dir="$PWD" \
     --subject_list_start_id=<id> --subject_list_end_id=<id+1> \
-    --input_dir="<id>_recon" --out_dir=gyralnet_island_32k_flip
+    --input_dir="<id>_recon" --out_dir=gyralnet_island_164k_flip
 ```
 
 ## Repository layout
@@ -62,7 +106,8 @@ python3 gyralnet.py --root_dir="$PWD" \
 | `20240707_prepare_hcp_surface.py`, `20240608_prepare_hcp_fmri.py` | HCP surface and fMRI preparation |
 | `32k_gradient_generate.py` | Gradient features on the 32k mesh |
 | `draw_3h_sphere_single_vtk.py` | Draw 3-hinge points on a sphere or surface VTK |
-| `sbatch_*.py`, `3h_generate_zl.sh` | Batch submission on a Slurm cluster |
+| `3h_generate_zl.sh` | Run `gyralnet.py` for every subject folder with GNU `parallel` |
+| `sbatch_*.py` | Slurm jobs for surface preparation and gradient features |
 
 ## Related papers
 
