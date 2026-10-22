@@ -2,7 +2,7 @@
 
 # DensityMap-GyralNet
 
-**Extract the gyral net and its 3-hinge gyri from cortical surface meshes.**
+**Extract the gyral net and its 3-hinge gyri from cortical surface meshes, driven by sulcal depth or by gradient-density maps.**
 
 ![Python](https://img.shields.io/badge/Python-3-3776AB?logo=python&logoColor=white)
 ![VTK](https://img.shields.io/badge/VTK-surfaces-1F6FEB)
@@ -31,6 +31,7 @@
 
 - **What it builds:** the *gyral net* — the gyral crests traced over the cortical surface — and its **3-hinge gyri**, the three-way crest junctions that act as fine-scale cortical hubs.
 - **In and out:** VTK surface and sphere meshes with per-vertex sulcal depth and curvature in; gyral skeletons, 3-hinge vertices and graph files (VTK) out.
+- **Why “DensityMap”:** besides the classic sulcal-depth route (`gyralnet.py`), `GDM_Net/` builds the same net from gradient-density maps on the 32k mesh, which is where the repository's name comes from.
 - **Scale:** one job per subject, submitted through Slurm; used on Human Connectome Project surfaces resampled to the 32k mesh.
 
 ## How it works
